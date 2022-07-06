@@ -1,0 +1,4072 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Gridea静态个人博客">
+<meta name="description" content="随影的碎碎念">
+<meta name="theme-color" content="#000">
+<title>react: 使用craco修改项目配置 | kevin5979</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1657122865679">
+<link rel="stylesheet" href="/media/css/gemini.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/dracula.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.0/velocity.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.0/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"
+  integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
+  integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+  onload="renderMathInElement(document.body);"></script>
+
+
+
+
+
+
+  <meta name="description" content="react: 使用craco修改项目配置" />
+  <meta name="keywords" content="react" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="gemini">
+  <header class="header  ">
+    <div class="blog-header box-shadow-wrapper bg-color " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="brand">
+              <span>kevin5979</span>
+            </a>  
+          
+        </div>
+        
+          <p class="subtitle">世间所有的相遇，都是久别重逢。</p>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-home"></i> 首页
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives/" target="_self">
+                  <i class="fa fa-archive"></i> 归档
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags/" target="_self">
+                  <i class="fa fa-tags"></i> 标签
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="http://kevin5979.github.io/post/about/" target="_self">
+                  <i class="fa fa-globe"></i> 关于
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-address-book"></i> 友情链接
+                  
+                </a>
+              </li>
+            
+          
+          
+            <li id="fa_search" class="nav-item">
+              <a href="javascript:void(0);">
+                <i class="fa fa-search"></i> <span class="language" data-lan="search">搜索</span>
+              </a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout gemini ">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body gemini" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper bg-color">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">随影</p>
+    
+    <div class="site-description right-motion">
+      
+        <p id="binft">喜欢认识很多人~</p>
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">22</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="">
+        <span class="site-item-stat-count">15</span>
+        <span class="site-item-stat-name language" data-lan="category">分类</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">15</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+    
+      <div class="sidebar-item">
+        <span class="site-item-rss">
+            <i class="fa fa-rss"></i>
+            <a href="http://kevin5979.github.io/atom.xml" target="_blank">RSS</a>
+        </span>
+      </div>
+    
+  
+  
+    <div class="sidebar-item sidebar-item-social">
+      <div class="social-item">
+        
+          
+            <a href="https://github.com/Kevin5979">
+              <i class="fa fa-github-alt" title="github"></i>
+            </a>
+          
+        
+        
+      </div>
+    </div>
+  
+
+
+
+  <div style="width: 100%; position: relative;">
+    <canvas id="canvasDiyBlock" style="width:100%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+    <script src="/media/js/magic/clock.js"></script>
+  </div>
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85-craco">安装 craco</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9packagejson%E6%96%87%E4%BB%B6">修改package.json文件</a></li>
+<li><a href="#%E5%9C%A8%E6%A0%B9%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9B%E5%BB%BAcracoconfigjs%E6%96%87%E4%BB%B6">在根目录下创建craco.config.js文件</a></li>
+<li><a href="#%E5%BA%94%E7%94%A8-craco%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D">应用: craco配置别名</a></li>
+<li><a href="#%E9%87%8D%E5%90%AF%E9%A1%B9%E7%9B%AE%E7%94%9F%E6%95%88">重启项目生效</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="http://kevin5979.github.io/post/react-shi-yong-craco-xiu-gai-xiang-mu-pei-zhi/">
+      react: 使用craco修改项目配置
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2021-10-11 17:38:02">2021-10-11</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">分类于</span>
+      
+      
+      <a href="http://kevin5979.github.io/tag/1X1jndvds/">
+        <span>react</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>1<span class="language" data-lan="minute">分钟</span></span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>199<span class="pc-show language" data-lan="words">字数</span></span>
+    </span>
+    
+    
+    
+    <span id="/post/react-shi-yong-craco-xiu-gai-xiang-mu-pei-zhi/" data-flag-title="react: 使用craco修改项目配置" class="meta-item pc-show leancloud_visitors">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-eye"></i>
+      <span><span class="language" data-lan="view">浏览量</span>：<span class="leancloud-visitors-count"></span></span>
+    </span>
+    
+  </div>
+</section>
+            <div class="post-body next-md-body" id="post_body">
+              <p>由于<code>react</code>脚手架中把<code>webpack</code>配置都隐藏起来了，我们修改起来不太方便，于是，记录一下使用<code>craco</code>来修改配置的方法</p>
+<!-- more -->
+<h2 id="安装-craco">安装 craco</h2>
+<pre><code class="language-js">yarn add @craco/craco
+</code></pre>
+<h2 id="修改packagejson文件">修改package.json文件</h2>
+<ul>
+<li>使用<code>craco</code>启动项目</li>
+</ul>
+<pre><code class="language-js">&quot;scripts&quot;: {
+-   &quot;start&quot;: &quot;react-scripts start&quot;,
+-   &quot;build&quot;: &quot;react-scripts build&quot;,
+-   &quot;test&quot;: &quot;react-scripts test&quot;,
+    &quot;eject&quot;: &quot;react-scripts eject&quot;,
++   &quot;start&quot;: &quot;craco start&quot;,
++   &quot;build&quot;: &quot;craco build&quot;,
++   &quot;test&quot;: &quot;craco test&quot;,
+}
+</code></pre>
+<h2 id="在根目录下创建cracoconfigjs文件">在根目录下创建craco.config.js文件</h2>
+<ul>
+<li>craco.config.js文件用于修改默认配置</li>
+</ul>
+<h2 id="应用-craco配置别名">应用: craco配置别名</h2>
+<pre><code class="language-js">const path = require(&quot;path&quot;);
+const resolve = dir =&gt; path.resolve(__dirname, dir);
+
+module.exports = {
+  // 其它配置...
+  ,
+  webpack: {
+    alias: {
+      '@': resolve(&quot;src&quot;),
+      'components': resolve(&quot;src/components&quot;),
+    }
+  }
+}
+</code></pre>
+<h2 id="重启项目生效">重启项目生效</h2>
+<pre><code class="language-js">yarn start
+</code></pre>
+<p><font size="2">最后更新于 2021-10-11</font></p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      随影
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="http://kevin5979.github.io/post/react-shi-yong-craco-xiu-gai-xiang-mu-pei-zhi/" title="react: 使用craco修改项目配置">http://kevin5979.github.io/post/react-shi-yong-craco-xiu-gai-xiang-mu-pei-zhi/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="http://kevin5979.github.io/tag/1X1jndvds/"># react</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="博客后端开发进程表" href="http://kevin5979.github.io/post/bo-ke-hou-duan-kai-fa-jin-cheng-biao/">博客后端开发进程表</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="博客后端开发进程表" href="http://kevin5979.github.io/post/bo-ke-hou-duan-kai-fa-jin-cheng-biao/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="记录: 我与病魔的一次抗争" href="http://kevin5979.github.io/post/ji-lu-wo-yu-bing-mo-de-yi-ci-kang-zheng/">记录: 我与病魔的一次抗争</a>
+        <a class="nav-mobile-next" title="记录: 我与病魔的一次抗争" href="http://kevin5979.github.io/post/ji-lu-wo-yu-bing-mo-de-yi-ci-kang-zheng/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  <script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<div id="vcomments" style="padding: 10px 0px 0px 0px"></div>
+
+<style>
+  .v .veditor {
+    min-height: 10rem;
+    background-image: url('');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: rgba(255, 255, 255, 0);
+    resize: none;
+  }
+
+  .v .vwrap {
+    border: 1px solid #000 !important;
+  }
+
+  .v .vbtn {
+    padding: .4rem 1.2rem !important;
+    border-color: #fff !important;
+    background-color: #49b1f5 !important;
+    color: #fff !important;
+    font-size: .7rem !important;
+  }
+
+  .v .vcards .vcard .vh .vmeta .vat {
+    padding: 0 .8rem !important;
+    border: 1px solid #00c4b6 !important;
+    border-radius: 5px !important;
+    color: #00c4b6 !important;
+  }
+</style>
+<script>
+  new Valine({
+    el: '#vcomments',
+    appId: 'kdgg16paDF6sJUSTTj4Ka3j7-gzGzoHsz',
+    appKey: '1YC22hbwcih1VNffidvcOjBs',
+    avatar: '',
+    placeholder: '交流一下吧~',
+    pageSize: '10',
+    lang: 'zh-cn',
+    enableQQ: 'true' === 'true',
+    visitor: 'true' === 'true',
+    highlight: 'true' === 'true',
+    avatarForce: 'true' === 'true',
+  });
+</script>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <span id="busuanzi_container_site_pv">浏览数 <span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
+    <div class="copyright">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+  </footer>
+  
+  
+  <div class="gemini back-to-top" id="back_to_top">
+    <i class="fa fa-arrow-up"></i>
+    
+    <span class="scrollpercent">
+      <span id="back_to_top_text">0</span>%
+    </span>
+    
+  </div>
+  
+  
+  
+  <div class="bg-img">
+    <img src="\media\images\bg.jpg" />
+  </div>
+  
+  
+  
+  
+<link rel="stylesheet" href="/media/live2d/css/live2d.css" />
+<div class="box-scale">
+  <div id="landlord" style="left: 5px;bottom: px;"
+    data-key="">
+    <canvas id="live2d" width="500" height="560" class="live2d"></canvas>
+    
+
+      <div class="message" style="opacity:0"></div>
+      <div class="live_talk_input_body">
+        <div class="live_talk_input_name_body">
+          <input name="name" type="text" class="live_talk_name white_input" id="AIuserName" autocomplete="off"
+            placeholder="你的名字" />
+        </div>
+        <div class="live_talk_input_text_body">
+          <input name="talk" type="text" class="live_talk_talk white_input" id="AIuserText" autocomplete="off"
+            placeholder="要和我聊什么呀？" />
+          <button type="button" class="live_talk_send_btn" id="talk_send">发送</button>
+        </div>
+      </div>
+      <input name="live_talk" id="live_talk" value="1" type="hidden" />
+      <div class="live_ico_box">
+        <div class="live_ico_item type_info" id="showInfoBtn"></div>
+        <div class="live_ico_item type_talk" id="showTalkBtn"></div>
+        
+        <div class="live_ico_item type_youdu" id="youduButton"></div>
+        <div class="live_ico_item type_quit" id="hideButton"></div>
+        <input name="live_statu_val" id="live_statu_val" value="0" type="hidden" />
+        <audio src="" style="display:none;" id="live2d_bgm" data-bgm="0" preload="none"></audio>
+        <input id="duType" value="douqilai" type="hidden">
+        
+      </div>
+    
+  </div>
+</div>
+<div id="open_live2d">召唤看板娘</div>
+<script>
+  var message_Path = 'https://cdn.jsdelivr.net/gh/hsxyhao/live2d.github.io@master/';
+  let landlord = document.querySelector('#landlord');
+  var apiKey = landlord.dataset.key;
+</script>
+<script type="text/javascript" src="/media/live2d/js/live2d.js"></script>
+<script>
+	var home_Path = document.location.protocol + '//' + window.document.location.hostname + ":" + window.document.location.port + '/';
+	var userAgent = window.navigator.userAgent.toLowerCase();
+	var norunAI = ["android", "iphone", "ipod", "ipad", "windows phone", "mqqbrowser", "msie", "trident/7.0"];
+	var norunFlag = false;
+
+	for (var i = 0; i < norunAI.length; i++) {
+		if (userAgent.indexOf(norunAI[i]) > -1) {
+			norunFlag = true;
+			break;
+		}
+	}
+
+	if (!window.WebGLRenderingContext) {
+		norunFlag = true;
+	}
+
+	if (!norunFlag) {
+		var hitFlag = false;
+		var AIFadeFlag = false;
+		var liveTlakTimer = null;
+		var sleepTimer_ = null;
+		var AITalkFlag = false;
+		var talkNum = 0;
+		(function () {
+			function renderTip(template, context) {
+				var tokenReg = /(\\)?\{([^\{\}\\]+)(\\)?\}/g;
+				return template.replace(tokenReg, function (word, slash1, token, slash2) {
+					if (slash1 || slash2) {
+						return word.replace('\\', '');
+					}
+					var variables = token.replace(/\s/g, '').split('.');
+					var currentObject = context;
+					var i, length, variable;
+					for (i = 0, length = variables.length; i < length; ++i) {
+						variable = variables[i];
+						currentObject = currentObject[variable];
+						if (currentObject === undefined || currentObject === null) return '';
+					}
+					return currentObject;
+				});
+			}
+
+			String.prototype.renderTip = function (context) {
+				return renderTip(this, context);
+			};
+
+			var re = /x/;
+			re.toString = function () {
+				showMessage('哈哈，你打开了控制台，是想要看看我的秘密吗？', 5000);
+				return '';
+			};
+
+			$(document).on('copy', function () {
+				showMessage('你都复制了些什么呀，转载要记得加上出处哦~~', 5000);
+			});
+
+			function initTips() {
+				$.ajax({
+					cache: true,
+					url: message_Path + 'message.json',
+					dataType: "json",
+					success: function (result) {
+						$.each(result.mouseover, function (index, tips) {
+							$(tips.selector).mouseover(function () {
+								var text = tips.text;
+								if (Array.isArray(tips.text)) text = tips.text[Math.floor(Math.random() * tips.text.length + 1) - 1];
+								text = text.renderTip({ text: $(this).text() });
+								showMessage(text, 3000);
+								talkValTimer();
+								clearInterval(liveTlakTimer);
+								liveTlakTimer = null;
+							});
+							$(tips.selector).mouseout(function () {
+								showHitokoto();
+								if (liveTlakTimer == null) {
+									liveTlakTimer = window.setInterval(function () {
+										showHitokoto();
+									}, 15000);
+								};
+							});
+						});
+						$.each(result.click, function (index, tips) {
+							$(tips.selector).click(function () {
+								if (hitFlag) {
+									return false
+								}
+								hitFlag = true;
+								setTimeout(function () {
+									hitFlag = false;
+								}, 8000);
+								var text = tips.text;
+								if (Array.isArray(tips.text)) text = tips.text[Math.floor(Math.random() * tips.text.length + 1) - 1];
+								text = text.renderTip({ text: $(this).text() });
+								showMessage(text, 3000);
+							});
+							clearInterval(liveTlakTimer);
+							liveTlakTimer = null;
+							if (liveTlakTimer == null) {
+								liveTlakTimer = window.setInterval(function () {
+									showHitokoto();
+								}, 15000);
+							};
+						});
+					}
+				});
+			}
+			initTips();
+
+			var text;
+			if (document.referrer !== '') {
+				var referrer = document.createElement('a');
+				referrer.href = document.referrer;
+				text = '嗨！来自 <span style="color:#0099cc;">' + referrer.hostname + '</span> 的朋友！';
+				var domain = referrer.hostname.split('.')[1];
+				if (domain == 'baidu') {
+					text = '嗨！ 来自 百度搜索 的朋友！<br>欢迎访问<span style="color:#0099cc;">「 ' + document.title.split(' - ')[0] + ' 」</span>';
+				} else if (domain == 'so') {
+					text = '嗨！ 来自 360搜索 的朋友！<br>欢迎访问<span style="color:#0099cc;">「 ' + document.title.split(' - ')[0] + ' 」</span>';
+				} else if (domain == 'google') {
+					text = '嗨！ 来自 谷歌搜索 的朋友！<br>欢迎访问<span style="color:#0099cc;">「 ' + document.title.split(' - ')[0] + ' 」</span>';
+				}
+			} else {
+				if (window.location.href == home_Path) { //主页URL判断，需要斜杠结尾
+					var now = (new Date()).getHours();
+					if (now > 23 || now <= 5) {
+						text = '你是夜猫子呀？这么晚还不睡觉，明天起的来嘛？';
+					} else if (now > 5 && now <= 7) {
+						text = '早上好！一日之计在于晨，美好的一天就要开始了！';
+					} else if (now > 7 && now <= 11) {
+						text = '上午好！工作顺利嘛，不要久坐，多起来走动走动哦！';
+					} else if (now > 11 && now <= 14) {
+						text = '中午了，工作了一个上午，现在是午餐时间！';
+					} else if (now > 14 && now <= 17) {
+						text = '午后很容易犯困呢，今天的运动目标完成了吗？';
+					} else if (now > 17 && now <= 19) {
+						text = '傍晚了！窗外夕阳的景色很美丽呢，最美不过夕阳红~~';
+					} else if (now > 19 && now <= 21) {
+						text = '晚上好，今天过得怎么样？';
+					} else if (now > 21 && now <= 23) {
+						text = '已经这么晚了呀，早点休息吧，晚安~~';
+					} else {
+						text = '嗨~ 快来逗我玩吧！';
+					}
+				} else {
+					text = '欢迎阅读<span style="color:#0099cc;">「 ' + document.title.split(' - ')[0] + ' 」</span>';
+				}
+			}
+			showMessage(text, 12000);
+		})();
+
+		liveTlakTimer = setInterval(function () {
+			showHitokoto();
+		}, 15000);
+
+		function showHitokoto() {
+			if (sessionStorage.getItem("Sleepy") !== "1") {
+				if (!AITalkFlag) {
+					$.getJSON('https://v1.hitokoto.cn/', function (result) {
+						talkValTimer();
+						showMessage(result.hitokoto, 0);
+					});
+				}
+			} else {
+				hideMessage(0);
+				if (sleepTimer_ == null) {
+					sleepTimer_ = setInterval(function () {
+						checkSleep();
+					}, 200);
+				}
+			}
+		}
+
+		function checkSleep() {
+			var sleepStatu = sessionStorage.getItem("Sleepy");
+			if (sleepStatu !== '1') {
+				talkValTimer();
+				showMessage('你回来啦~', 0);
+				clearInterval(sleepTimer_);
+				sleepTimer_ = null;
+			}
+		}
+
+		function showMessage(text, timeout) {
+			if (Array.isArray(text)) text = text[Math.floor(Math.random() * text.length + 1) - 1];
+			$('.message').stop();
+			$('.message').html(text);
+			$('.message').fadeTo(200, 1);
+			//if (timeout === null) timeout = 5000;
+			//hideMessage(timeout);
+		}
+		function talkValTimer() {
+			$('#live_talk').val('1');
+		}
+
+		function hideMessage(timeout) {
+			//$('.message').stop().css('opacity',1);
+			if (timeout === null) timeout = 5000;
+			$('.message').delay(timeout).fadeTo(200, 0);
+		}
+
+		function initLive2d() {
+			$('#hideButton').on('click', function () {
+				if (AIFadeFlag) {
+					return false;
+				} else {
+					AIFadeFlag = true;
+					localStorage.setItem("live2dhidden", "0");
+					$('#landlord').fadeOut(200);
+					$('#open_live2d').delay(200).fadeIn(200);
+					setTimeout(function () {
+						AIFadeFlag = false;
+					}, 300);
+				}
+			});
+			$('#open_live2d').on('click', function () {
+				if (AIFadeFlag) {
+					return false;
+				} else {
+					AIFadeFlag = true;
+					localStorage.setItem("live2dhidden", "1");
+					$('#open_live2d').fadeOut(200);
+					$('#landlord').delay(200).fadeIn(200);
+					setTimeout(function () {
+						AIFadeFlag = false;
+					}, 300);
+				}
+			});
+			$('#youduButton').on('click', function () {
+				if ($('#youduButton').hasClass('doudong')) {
+					var typeIs = $('#youduButton').attr('data-type');
+					$('#youduButton').removeClass('doudong');
+					$('body').removeClass(typeIs);
+					$('#youduButton').attr('data-type', '');
+				} else {
+					var duType = $('#duType').val();
+					var duArr = duType.split(",");
+					var dataType = duArr[Math.floor(Math.random() * duArr.length)];
+
+					$('#youduButton').addClass('doudong');
+					$('#youduButton').attr('data-type', dataType);
+					$('body').addClass(dataType);
+				}
+			});
+			if (apiKey) {
+				$('#showInfoBtn').on('click', function () {
+					var live_statu = $('#live_statu_val').val();
+					if (live_statu == "0") {
+						return
+					} else {
+						$('#live_statu_val').val("0");
+						$('.live_talk_input_body').fadeOut(500);
+						AITalkFlag = false;
+						showHitokoto();
+						$('#showTalkBtn').show();
+						$('#showInfoBtn').hide();
+					}
+				});
+				$('#showTalkBtn').on('click', function () {
+					var live_statu = $('#live_statu_val').val();
+					if (live_statu == "1") {
+						return
+					} else {
+						$('#live_statu_val').val("1");
+						$('.live_talk_input_body').fadeIn(500);
+						AITalkFlag = true;
+						$('#showTalkBtn').hide();
+						$('#showInfoBtn').show();
+
+					}
+				});
+				$('#talk_send').on('click', function () {
+					var info_ = $('#AIuserText').val();
+					var userid_ = $('#AIuserName').val();
+					if (info_ == "") {
+						showMessage('写点什么吧！', 0);
+						return;
+					}
+					if (userid_ == "") {
+						showMessage('聊之前请告诉我你的名字吧！', 0);
+						return;
+					}
+					showMessage('思考中~', 0);
+					let protocol = window.location.protocol.indexOf("s") > 0 ? "https" : "http";
+					$.ajax({
+						type: "get",
+						url: `${protocol}://www.tuling123.com/openapi/api?key=${apiKey}&info=${info_}`,
+						dataType: "json",
+						success: function (res) {
+							talkValTimer();
+							showMessage(res.text, 0);
+							$('#AIuserText').val("");
+							sessionStorage.setItem("live2duser", userid_);
+						},
+						error: function (e) {
+							talkValTimer();
+							showMessage('似乎有什么错误，请和站长联系！', 0);
+						}
+					});
+				});
+			} else {
+				$('#showInfoBtn').hide();
+				$('#showTalkBtn').hide();
+			}
+			//获取音乐信息初始化
+			var bgmListInfo = $('input[name=live2dBGM]');
+			if (bgmListInfo.length == 0) {
+				$('#musicButton').hide();
+			} else {
+				var bgmPlayNow = parseInt($('#live2d_bgm').attr('data-bgm'));
+				var bgmPlayTime = 0;
+				var live2dBGM_Num = sessionStorage.getItem("live2dBGM_Num");
+				var live2dBGM_PlayTime = sessionStorage.getItem("live2dBGM_PlayTime");
+				if (live2dBGM_Num) {
+					if (live2dBGM_Num <= $('input[name=live2dBGM]').length - 1) {
+						bgmPlayNow = parseInt(live2dBGM_Num);
+					}
+				}
+				if (live2dBGM_PlayTime) {
+					bgmPlayTime = parseInt(live2dBGM_PlayTime);
+				}
+				var live2dBGMSrc = bgmListInfo.eq(bgmPlayNow).val();
+				$('#live2d_bgm').attr('data-bgm', bgmPlayNow);
+				$('#live2d_bgm').attr('src', live2dBGMSrc);
+				$('#live2d_bgm')[0].currentTime = bgmPlayTime;
+				$('#live2d_bgm')[0].volume = 0.5;
+				var live2dBGM_IsPlay = sessionStorage.getItem("live2dBGM_IsPlay");
+				var live2dBGM_WindowClose = sessionStorage.getItem("live2dBGM_WindowClose");
+				if (live2dBGM_IsPlay == '0' && live2dBGM_WindowClose == '0') {
+					$('#live2d_bgm')[0].play();
+					$('#musicButton').addClass('play');
+				}
+				sessionStorage.setItem("live2dBGM_WindowClose", '1');
+				$('#musicButton').on('click', function () {
+					if ($('#musicButton').hasClass('play')) {
+						$('#live2d_bgm')[0].pause();
+						$('#musicButton').removeClass('play');
+						sessionStorage.setItem("live2dBGM_IsPlay", '1');
+					} else {
+						$('#live2d_bgm')[0].play();
+						$('#musicButton').addClass('play');
+						sessionStorage.setItem("live2dBGM_IsPlay", '0');
+					}
+				});
+				window.onbeforeunload = function () {
+					sessionStorage.setItem("live2dBGM_WindowClose", '0');
+					if ($('#musicButton').hasClass('play')) {
+						sessionStorage.setItem("live2dBGM_IsPlay", '0');
+					}
+				}
+				document.getElementById('live2d_bgm').addEventListener("timeupdate", function () {
+					var live2dBgmPlayTimeNow = document.getElementById('live2d_bgm').currentTime;
+					sessionStorage.setItem("live2dBGM_PlayTime", live2dBgmPlayTimeNow);
+				});
+				document.getElementById('live2d_bgm').addEventListener("ended", function () {
+					var listNow = parseInt($('#live2d_bgm').attr('data-bgm'));
+					listNow++;
+					if (listNow > $('input[name=live2dBGM]').length - 1) {
+						listNow = 0;
+					}
+					var listNewSrc = $('input[name=live2dBGM]').eq(listNow).val();
+					sessionStorage.setItem("live2dBGM_Num", listNow);
+					$('#live2d_bgm').attr('src', listNewSrc);
+					$('#live2d_bgm')[0].play();
+					$('#live2d_bgm').attr('data-bgm', listNow);
+				});
+				document.getElementById('live2d_bgm').addEventListener("error", function () {
+					$('#live2d_bgm')[0].pause();
+					$('#musicButton').removeClass('play');
+					showMessage('音乐似乎加载不出来了呢！', 0);
+				});
+			}
+			//获取用户名
+			var live2dUser = sessionStorage.getItem("live2duser");
+			if (live2dUser !== null) {
+				$('#AIuserName').val(live2dUser);
+			}
+			//获取位置
+			var landL = sessionStorage.getItem("historywidth");
+			var landB = sessionStorage.getItem("historyheight");
+			if (landL == null || landB == null) {
+				landL = '5px'
+				landB = '0px'
+			}
+			$('#landlord').css('left', landL + 'px');
+			$('#landlord').css('bottom', landB + 'px');
+			//移动
+			function getEvent() {
+				return window.event || arguments.callee.caller.arguments[0];
+			}
+			var smcc = document.getElementById("landlord");
+			var moveX = 0;
+			var moveY = 0;
+			var moveBottom = 0;
+			var moveLeft = 0;
+			var moveable = false;
+			var docMouseMoveEvent = document.onmousemove;
+			var docMouseUpEvent = document.onmouseup;
+			smcc.onmousedown = function () {
+				var ent = getEvent();
+				moveable = true;
+				moveX = ent.clientX;
+				moveY = ent.clientY;
+				var obj = smcc;
+				moveBottom = parseInt(obj.style.bottom);
+				moveLeft = parseInt(obj.style.left);
+				if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
+					window.getSelection().removeAllRanges();
+				}
+				document.onmousemove = function () {
+					if (moveable) {
+						var ent = getEvent();
+						var x = moveLeft + ent.clientX - moveX;
+						var y = moveBottom + (moveY - ent.clientY);
+						obj.style.left = x + "px";
+						obj.style.bottom = y + "px";
+					}
+				};
+				document.onmouseup = function () {
+					if (moveable) {
+						var historywidth = obj.style.left;
+						var historyheight = obj.style.bottom;
+						historywidth = historywidth.replace('px', '');
+						historyheight = historyheight.replace('px', '');
+						sessionStorage.setItem("historywidth", historywidth);
+						sessionStorage.setItem("historyheight", historyheight);
+						document.onmousemove = docMouseMoveEvent;
+						document.onmouseup = docMouseUpEvent;
+						moveable = false;
+						moveX = 0;
+						moveY = 0;
+						moveBottom = 0;
+						moveLeft = 0;
+					}
+				};
+			};
+		}
+		$(document).ready(function () {
+			var AIimgSrc = [];
+			let chooseLive2d = 'histoire'
+			if (chooseLive2d === 'histoire') {
+				AIimgSrc.push(message_Path + "model/histoire/histoire.1024/texture_00.png");
+				AIimgSrc.push(message_Path + "model/histoire/histoire.1024/texture_01.png");
+				AIimgSrc.push(message_Path + "model/histoire/histoire.1024/texture_02.png");
+				AIimgSrc.push(message_Path + "model/histoire/histoire.1024/texture_03.png");
+			} else if (chooseLive2d === 'rem') {
+				AIimgSrc.push(message_Path + "model/rem/remu2048/texture_00.png");
+			} else if (chooseLive2d === 'aoba') {
+				AIimgSrc.push(message_Path + "model/aoba/textures/texture_00.png");
+			} else if (chooseLive2d === 'hijiki') {
+				AIimgSrc.push(message_Path + "model/hijiki/moc/hijiki.2048/texture_00.png");
+			} else if (chooseLive2d === 'tororo') {
+				AIimgSrc.push(message_Path + "model/tororo/moc/tororo.2048/texture_00.png");
+			}
+			var images = [];
+			var imgLength = AIimgSrc.length;
+			var loadingNum = 0;
+			for (var i = 0; i < imgLength; i++) {
+				images[i] = new Image();
+				images[i].src = AIimgSrc[i];
+				images[i].onload = function () {
+					loadingNum++;
+					if (loadingNum === imgLength) {
+						var live2dhidden = localStorage.getItem("live2dhidden");
+						if (live2dhidden === "0") {
+							setTimeout(function () {
+								$('#open_live2d').fadeIn(200);
+							}, 1300);
+						} else {
+							setTimeout(function () {
+								$('#landlord').fadeIn(200);
+							}, 1300);
+						}
+						let model = '';
+						if (chooseLive2d === 'histoire') {
+							model = message_Path + "model/histoire/model.json";
+						} else if (chooseLive2d === 'rem') {
+							model = message_Path + "model/rem/model.json";
+						} else if (chooseLive2d === 'aoba') {
+							model = message_Path + "model/aoba/model.json";
+						} else if (chooseLive2d === 'hijiki') {
+							model = message_Path + "model/hijiki/hijiki.model.json";
+						} else if (chooseLive2d === 'tororo') {
+							model = message_Path + "model/tororo/tororo.model.json";
+						}
+						setTimeout(function () {
+							loadlive2d("live2d", model);
+						}, 1000);
+						initLive2d();
+						images = null;
+					}
+				}
+			}
+		});
+	}
+</script>
+  
+  
+</div>
+<script>
+
+  let sideBarOpen = 'sidebar-open';
+  let body = document.body;
+  let back2Top = document.querySelector('#back_to_top'),
+    back2TopText = document.querySelector('#back_to_top_text'),
+    drawerBox = document.querySelector('#drawer_box'),
+    rightSideBar = document.querySelector('.sidebar'),
+    viewport = document.querySelector('body');
+
+  function scrollAnimation(currentY, targetY) {
+
+    let needScrollTop = targetY - currentY
+    let _currentY = currentY
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10)
+      _currentY += dist
+      window.scrollTo(_currentY, currentY)
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY)
+      } else {
+        window.scrollTo(_currentY, targetY)
+      }
+    }, 1)
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener('scroll', function (e) {
+    let percent = document.scrollingElement.scrollTop / (document.scrollingElement.scrollHeight - document.scrollingElement.clientHeight) * 100;
+    if (percent > 1 && !back2Top.classList.contains('back-top-active')) {
+      back2Top.classList.add('back-top-active');
+    }
+    if (percent == 0) {
+      back2Top.classList.remove('back-top-active');
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+
+  let hasCacu = false;
+  window.addEventListener('resize', function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (!hasCacu && back2Top.classList.contains('pisces') || back2Top.classList.contains('gemini')) {
+      let sideBar = document.querySelector('.sidebar');
+      let navUl = document.querySelector('#site_nav');
+      sideBar.style = 'margin-top:' + (navUl.offsetHeight + navUl.offsetTop + 15) + 'px;';
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false, MOTION_TIME = 300, RIGHT_MOVE_DIS = '320px';
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll('.right-motion');
+    let right = drawerBox.classList.contains('right');
+
+    let transitionDir = right ? "transition.slideRightIn" : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS
+      };
+      closeProp = {
+        paddingRight: '0px'
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS
+      };
+      closeProp = {
+        paddingLeft: '0px'
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, 'stop');
+      jQuery.Velocity(viewport, 'stop');
+      jQuery.Velocity(rightMotions, 'stop');
+      if (open) {
+        jQuery.Velocity(rightSideBar, {
+          width: RIGHT_MOVE_DIS
+        }, {
+          duration: MOTION_TIME,
+          begin: function () {
+            jQuery.Velocity(rightMotions, transitionDir, {});
+          }
+        })
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME
+        });
+      } else {
+        jQuery.Velocity(rightSideBar, {
+          width: '0px'
+        }, {
+          duration: MOTION_TIME,
+          begin: function () {
+            jQuery.Velocity(rightMotions, {
+              opacity: 0
+            });
+          }
+        })
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle('muse-line');
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    }
+  }
+
+  // 链接跳转
+  let newWindow = 'false'
+  if (newWindow === 'true') {
+    let links = document.querySelectorAll('.post-body a')
+    links.forEach(item => {
+      if (!item.classList.contains('btn')) {
+        item.setAttribute("target", "_blank");
+      }
+    })
+  }
+
+  let faSearch = document.querySelector('#fa_search');
+  faSearch && faSearch.addEventListener('click', function () {
+    document.querySelector('#search_mask').style = ''
+  })
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+  
+  // 离开当前页title变化
+  var leaveTitle = "记得回来~";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState == 'hidden') {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll('.section img');
+  images.forEach(image => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement('a');
+    aelem.href = image.src;
+    aelem.dataset['fancybox'] = 'images';
+    aelem.dataset['rel'] = 'fancybox-button';
+    aelem.classList.add('fancybox');
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  })
+</script>
+
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<div class="search-mask" id="search_mask" style="display: none;">
+  <div class="search-box">
+    <div class="search-title">
+      <i class="fa fa-search"></i>
+      <div class="input-box">
+        <input id="search" type="text" class="language" data-lan="search" placeholder="搜索">
+      </div>
+      <i id="close" class="fa fa-times-circle"></i>
+    </div>
+    <div class="stat-box">
+      <span id="stat_count">0</span><span class="language" data-lan="stat">条相关条目，使用了</span><span id="stat_times">0</span><span class="language" data-lan="stat-time">毫秒</span>
+      <hr>
+    </div>
+    <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/ji-lu-wo-de-bi-ye/"" data-c="
+          &lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1657121581446.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h2 id=&#34;毕业&#34;&gt;毕业&lt;/h2&gt;
+&lt;p&gt;转眼到了六七月盛夏，完成了毕业设计，拿到毕业证书仿佛就是一瞬间，一瞬间被扔到社会上接受毒打，都还没准备好，大家就搬着行李各执一路，我宿舍的四个人，在最后甚至没有再吃过一顿饭，没有再拍一张集体照。&lt;/p&gt;
+&lt;h2 id=&#34;同学们&#34;&gt;同学们&lt;/h2&gt;
+&lt;p&gt;记得最后离校的几天，每天在隔壁的宿舍聊天吹牛，什么都讲，大家欢聚一堂，可能这便是大学四年散场最后的喧嚣。大家一起聊工作，聊八卦，互相打闹，相互调侃，估计再过几个月，这个宿舍还会再次迎来新的一批主人，一届一届事物依旧。&lt;/p&gt;
+&lt;h2 id=&#34;如今&#34;&gt;如今&lt;/h2&gt;
+&lt;p&gt;十几平米的小单间，承载着我这生活的全部，每天8点出门，7点回来，朝九晚六的工作，最最让我开心的是，每天和家里打微信视频的聊天，聊聊今天的工作，以及周围的一切新奇的事情，这真的是我独居小单间最大的，也是最幸福的事情。&lt;/p&gt;
+&lt;h2 id=&#34;工作&#34;&gt;工作&lt;/h2&gt;
+&lt;p&gt;都说今年应届毕业生工作难找，我是见识到了，在深圳的一个月里，大大小小面了十来家，终于才拿到一个offer, 我很幸运，也很珍惜，之前我也想过转行，也找过别的工作，但别人都不要，真实的心塞，就像家里人说的，先入行，再考虑薪资的情况，嗯，目前我已经上班几天了，公司同事们都挺照顾我，希望能在这家公司成长吧。&lt;/p&gt;
+&lt;h2 id=&#34;治愈&#34;&gt;治愈&lt;/h2&gt;
+&lt;p&gt;最近迷上了听这种治愈的歌曲，每天在公交、地铁上，难免会思绪翻涌，一些对于未来的想法，面包和理想，鼓励自己坚持下去，我已经毕业了，是社会了，不在小孩子脾气，摒弃学生的办事思维，要努力，要分担家里负担，希望一切顺利吧。&lt;/p&gt;
+&lt;h2 id=&#34;跃入人海&#34;&gt;跃入人海&lt;/h2&gt;
+&lt;p&gt;再见了，学生生涯，让我们一起跃入人海，做一朵奔涌的浪花。&lt;/p&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2022-7-6&lt;/font&gt;
+">记录我的毕业</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/2021-nian-du-zong-jie/"" data-c="
+          &lt;p&gt;时光匆匆，又一年准备结束了，回顾一年来的工作生活，收获了许多❤️💛💚💙💜🖤💗&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;p&gt;写了很多，最后删了，2021这一年，从学生逐渐转进入社会，找到了实习工作，技术上没有学习到新技术，但经历了几个项目之后，我对之前的技术知识掌握更加深刻，另外，今天也是离职的日子，2021给予我的是更多的精神方面和接人待物方面的成长，今年总结贴几个标签算了，来年继续努力&lt;/p&gt;
+&lt;p&gt;🥕学校考试顺利通过，已达到毕业要求🥕&lt;br&gt;
+🥕找到实习工作🥕&lt;br&gt;
+🥕换新手机了🥕&lt;br&gt;
+🥕软考高级挂了，下次加油🥕&lt;br&gt;
+🥕找到实习工作🥕&lt;br&gt;
+🥕去上海出差🥕&lt;br&gt;
+🥕毕业设计选题🥕&lt;br&gt;
+🥕今天离职啦🥕&lt;/p&gt;
+&lt;p&gt;2022许愿， ❤️找到满意的工作，再换台电脑，顺利毕业❤️&lt;/p&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-12-31&lt;/font&gt;
+">2021年度总结</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/git-ru-he-ba-develop-fen-zhi-dai-ma-he-bing-dao-master-zhu-fen-zhi/"" data-c="
+          &lt;p&gt;&lt;code&gt;master 主分支&lt;/code&gt;  &lt;code&gt;develop 分支&lt;/code&gt;&lt;br&gt;
+一般我们在开发项目的过程中，会在分支中去开发，在开发结束的一个周期再把代码代码合并到主分支中。所以就会存在一个问题，如何把分支代码合并到主分支，接下来记录一下我合并分支的一个命令流程&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;前提是，分支代码和主分支代码不会有冲突，就是说主分支目前的所有的代码和分支那部分代码是相同的。&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3 id=&#34;1切换分支&#34;&gt;1.切换分支&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git checkout develop&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;2用git-pull-把分支代码pull下来&#34;&gt;2.用git pull 把分支代码pull下来&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git pull origin develop&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;3切换到主分支&#34;&gt;3.切换到主分支&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git checkout master&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;4把分支的代码merge到主分支&#34;&gt;4.把分支的代码merge到主分支&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git merge develop&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;5git-push推送到远程仓库现在你自己分支的代码就合并到主分支上了&#34;&gt;5.git push推送到远程仓库，现在你自己分支的代码就合并到主分支上了。&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git push origin master&lt;/p&gt;
+&lt;/blockquote&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-12-16&lt;/font&gt;
+">git 如何把develop分支代码合并到master主分支？</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/wo-dao-shang-hai-de-liang-zhou/"" data-c="
+          &lt;p&gt;&lt;strong&gt;最近两周去了上海参与了柚趣盲盒项目的开发，比较忙，今天已经回到深圳啦😋，记录一下我在上海的感受吧&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3 id=&#34;关于天气&#34;&gt;关于天气&lt;/h3&gt;
+&lt;p&gt;刚开始查询上海的天气的时候，2&lt;sub&gt;3度的最低温，然后就带了几件我最厚的衣服，没想到，只是比深圳冷一点，带去的衣服没用上&lt;/sub&gt;&lt;/p&gt;
+&lt;h3 id=&#34;关于交通&#34;&gt;关于交通&lt;/h3&gt;
+&lt;p&gt;上海的地铁感觉有些慢节奏，开关门都是1分钟以上的感觉，这要是在深圳，感觉15秒都多了.. 从酒店到公司，30分钟的路程，走路，周边风景很美，绿化也很好，空气清晰，你还能看到每天早上有人在湖边钓鱼，十分惬意&lt;/p&gt;
+&lt;h3 id=&#34;公司的氛围&#34;&gt;公司的氛围&lt;/h3&gt;
+&lt;p&gt;上海柚子工道是一家很有凝聚力的公司，上班时间也比较松，周末双休，早上是9点半到10点 到公司就可以，中午11点半就可以吃午饭啦，下午是一点钟到6点半的上班时间，上班是可以有很多讨论，特别是业务相关的讨论，每个人都认真提出自己的想法，群策群力，氛围很可以&lt;/p&gt;
+&lt;h3 id=&#34;关于好吃的&#34;&gt;关于好吃的&lt;/h3&gt;
+&lt;p&gt;公司楼下就有餐厅，手撕鸡不错，其他的也可以，菜品比较多，价格正常，可能比深圳的贵一丢丢，我也就会吃.. 菜名不记得了😶&lt;/p&gt;
+&lt;h3 id=&#34;上海的景点&#34;&gt;上海的景点&lt;/h3&gt;
+&lt;p&gt;周末时间去了下外滩，南京街，东方明珠，夜景很好看，很多感慨，大都市的风采，游人也很礼貌，感觉很好，希望下次还能来呀&lt;/p&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1639199215487.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;回到深圳，继续加油！！！&lt;br&gt;
+今天周六，祝大家周末愉快！！！&lt;/p&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-12-10&lt;/font&gt;
+">我到上海的两周</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/zong-jie-shi-jian-ge-shi-hua/"" data-c="
+          &lt;p&gt;最近在搞自己的uni-app小项目，发现时间格式化功能非常常用的，而我又不想使用 &lt;code&gt;dayjs&lt;/code&gt; 等工具，所以，记录一下时间格式化的工具函数⏱，以后都能来这里复制粘贴啦&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;直接上代码&#34;&gt;直接上代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;export function dateFormat(birthday,fmt) {
+	let date = new Date(birthday);
+	let ret;
+	const opt = {
+		&amp;quot;Y+&amp;quot;: date.getFullYear().toString(), // 年
+		&amp;quot;M+&amp;quot;: (date.getMonth() + 1).toString(), // 月
+		&amp;quot;D+&amp;quot;: date.getDate().toString(), // 日
+		&amp;quot;h+&amp;quot;: date.getHours().toString(), // 时
+		&amp;quot;m+&amp;quot;: date.getMinutes().toString(), // 分
+		&amp;quot;s+&amp;quot;: date.getSeconds().toString() // 秒
+		// 有其他格式化字符需求可以继续添加，必须转化成字符串
+	};
+	for (let k in opt) {
+		ret = new RegExp(&amp;quot;(&amp;quot; + k + &amp;quot;)&amp;quot;).exec(fmt);
+		if (ret) {
+			fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, &amp;quot;0&amp;quot;)))
+		};
+	};
+	return fmt;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;今天周六，祝大家周末愉快！！！&lt;/p&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-11-13&lt;/font&gt;
+">总结: 时间格式化</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/uni-app-lu-you-guan-li-uni-simple-router/"" data-c="
+          &lt;p&gt;这周天气变冷，我都不想动了🥗，前几天准备重写一下之前的uni-app项目，发现之前写的不是很优雅，路由管理不是很好，百度一波，顺利找到 &lt;a href=&#34;https://hhyang.cn/v2/start/quickstart.html&#34;&gt;uni-simple-router&lt;/a&gt;，试验一波，顺利上车啦🙊&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;算了文档已经写的很清楚&#34;&gt;算了，文档已经写的很清楚...&lt;/h2&gt;
+&lt;p&gt;忙着双十一加购物车呢😘，谁有空啊~，自己看文档 &lt;a href=&#34;https://hhyang.cn/v2/start/quickstart.html&#34;&gt;uni-simple-router&lt;/a&gt;&lt;/p&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-11-10&lt;/font&gt;
+">uni-app 路由管理 (uni-simple-router)</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/ren-shi-zhen-ting-qi-watch/"" data-c="
+          &lt;h2 id=&#34;什么是侦听器呢&#34;&gt;什么是侦听器呢？&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;开发中我们在data返回的对象中定义了数据，这个数据通过插值语法等方式绑定到template中；&lt;/li&gt;
+&lt;li&gt;当数据变化时，template会自动进行更新来显示最新的数据；&lt;/li&gt;
+&lt;li&gt;但是在某些情况下，我们希望在代码逻辑中监听某个数据的变化，这个时候就需要用侦听器watch来完成了；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;侦听器的用法&#34;&gt;侦听器的用法&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;选项：watch&lt;/li&gt;
+&lt;li&gt;类型：&lt;code&gt;{ [key: string]: string | Function | Object | Array}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;详细：一个对象，键是需要观察的表达式，值是对应回调函数。值也可以是方法名，或者包含选项的对象。Vue 实例将会在实例化时调用 &lt;code&gt;$watch()&lt;/code&gt;，遍历&lt;code&gt;watch&lt;/code&gt;对象的每一个 &lt;code&gt;property&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;使用例子&#34;&gt;使用例子&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;var vm = new Vue({
+  data: {
+    a: 1,
+    b: 2,
+    c: 3,
+    d: 4,
+    e: {
+      f: {
+        g: 5
+      }
+    }
+  },
+  watch: {
+    a: function (val, oldVal) {     // 最常见用法
+      console.log(&#39;new: %s, old: %s&#39;, val, oldVal)
+    },
+    // 方法名 someMethod 必须在 methods 中定义
+    b: &#39;someMethod&#39;,
+    // deep: true 
+    // 该回调会在任何被侦听的对象的 property 改变时被调用，不论其被嵌套多深
+    c: {
+      handler: function (val, oldVal) { /* ... */ },
+      deep: true
+    },
+    // immediate: true
+    // 该回调将会在侦听开始之后被立即调用
+    d: {
+      handler: &#39;someMethod&#39;,
+      immediate: true
+    },
+    // 你可以传入回调数组，它们会被逐一调用
+    e: [
+      &#39;handle1&#39;,
+      function handle2 (val, oldVal) { /* ... */ },
+      {
+        handler: function handle3 (val, oldVal) { /* ... */ },
+        /* ... */
+      }
+    ],
+    // watch vm.e.f&#39;s value: {g: 5}
+    &#39;e.f&#39;: function (val, oldVal) { /* ... */ }
+  }
+})
+vm.a = 2 // =&amp;gt; new: 2, old: 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635996325170.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h2 id=&#34;vmwatch-exporfn-callback-options&#34;&gt;vm.$watch( expOrFn, callback, [options] )&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;我们可以在created的生命周期中，使用this.$watchs来侦听；
+&lt;ul&gt;
+&lt;li&gt;第一个参数是要侦听的源；&lt;/li&gt;
+&lt;li&gt;第二个参数是侦听的回调函数callback；&lt;/li&gt;
+&lt;li&gt;第三个参数是额外的其他选项，比如deep、immediate；&lt;/li&gt;
+&lt;li&gt;返回一个取消观察函数，用来停止触发回调：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635996639727.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;http://kevin5979.github.io/post-images/1635996828669.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;*链接: https://cn.vuejs.org/v2/api/#vm-watch&lt;/p&gt;
+&lt;h2 id=&#34;注意&#34;&gt;注意&lt;/h2&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635996472366.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+ &lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-11-4&lt;/font&gt;
+">认识侦听器watch</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/ref-he-options/"" data-c="
+          &lt;p&gt;最近上班用vue写一个管理系统，很多的表格页面都会有弹出窗，也会有很多的分页请求等等通用功能，这里记录一些管理系统的通用简便写法🚕🚕🚕（昨天剪了个很丑的头发，气死😤我了）&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;ref-来控制弹出窗&#34;&gt;ref 来控制弹出窗&lt;/h2&gt;
+&lt;h3 id=&#34;步骤&#34;&gt;步骤&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;主页面中给弹窗组件添加ref&lt;/li&gt;
+&lt;li&gt;使用ref获取弹窗组件元素，调用组件的init方法，并传递参数&lt;/li&gt;
+&lt;li&gt;在弹窗组件中保存数据，进行渲染等操作&lt;/li&gt;
+&lt;li&gt;如果有事件通知父组件，通过$emit来发送&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;handle ref=&amp;quot;handle&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;this.$nextTick(() =&amp;gt; {
+    this.$refs.handle.init(&#39;参数&#39;);
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;&amp;lt;template&amp;gt;
+  &amp;lt;el-dialog
+    v-if=&amp;quot;open&amp;quot;
+    title=&amp;quot;查看&amp;quot;
+    top=&amp;quot;6vh&amp;quot;
+    append-to-body
+    :visible.sync=&amp;quot;open&amp;quot;
+    :before-close=&amp;quot;handleClose&amp;quot;
+  &amp;gt;
+    内容
+  &amp;lt;/el-dialog&amp;gt;
+&amp;lt;/template&amp;gt;
+
+&amp;lt;script&amp;gt;
+export default {
+  name: &amp;quot;handle&amp;quot;,
+  data() {
+    return {
+      open: false,
+      list: {}
+    };
+  },
+  methods: {
+    init(data) {
+      this.open = true;
+      this.list = data;
+    },
+    handleClose(done) { // 关闭
+    // this.$emit(&#39;event&#39;)
+      done();
+    }
+  }
+};
+&amp;lt;/script&amp;gt;
+
+&amp;lt;style scoped&amp;gt;&amp;lt;/style&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;options-初始化data数据&#34;&gt;options 初始化data数据&lt;/h2&gt;
+&lt;h3 id=&#34;语法-thisoptionsdata&#34;&gt;语法 : this.$options.data()&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;注意：data()中若使用了this来访问props或methods，在重置&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;时&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;，&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;注&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;意&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;.&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;data时，注意this.&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.69444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord cjk_fallback&#34;&gt;时&lt;/span&gt;&lt;span class=&#34;mord cjk_fallback&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;mord cjk_fallback&#34;&gt;注&lt;/span&gt;&lt;span class=&#34;mord cjk_fallback&#34;&gt;意&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;h&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;options.data()的this指向，最好使用this.$options.data.call(this)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;代码-2&#34;&gt;代码&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;data() {
+  return {
+    queryParams: {
+      current: 1,
+      size: 10,
+      supplierNum: &amp;quot;&amp;quot;
+    }
+  }
+}
+
+// 重置
+resetQuery() {
+  this.queryParams = this.$options.data().call(this).queryParams;
+  this.getList();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-11-1&lt;/font&gt;
+">ref 和 options</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/wei-xin-xiao-cheng-xu-de-lu-you-lan-jie/"" data-c="
+          &lt;p&gt;昨天写了个小程序案例，发现小程序没有提供路由拦截的功能，查了半天资料，终于是搞定了，这里记录一下下&lt;br&gt;
+PS: 如果对node.js比较熟悉的话，应该对express/koa框架中的经常提到的中间件概念比较熟悉，这里就使用中间件的机制来处理。结合小程序中&lt;code&gt;Page()函数&lt;/code&gt;和&lt;code&gt;生命周期&lt;/code&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;需求描述&#34;&gt;需求描述&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;小程序需开发过程中，有些页面我们希望用户登录授权后才可以使用，然而我们不能再每个页面添加登录验证代码，这样似乎太麻烦了，希望能制作一个通用的小程序路由拦截器&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;实现过程&#34;&gt;实现过程&lt;/h2&gt;
+&lt;h3 id=&#34;微信授权代码&#34;&gt;微信授权代码&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;wx.getUserProfile({
+  desc: &#39;用于完善会员资料&#39;, // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+  success: (res) =&amp;gt; {
+    this.setData({
+    userInfo: res.userInfo
+    })
+  }
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;用户资料的保存-清除&#34;&gt;用户资料的保存、清除&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;wx.getUserProfile({
+  desc: &#39;用于完善会员资料&#39;, // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+  success: (res) =&amp;gt; {
+    this.setData({
+    userInfo: res.userInfo
+    })
+    wx.setStorageSync(&#39;userInfo&#39;, res.userInfo)
+  },
+  fail() {
+    this.setData({
+      userInfo: {}
+    })
+    wx.removeStorageSync(&#39;userInfo&#39;)
+  }
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;全局路由拦截器&#34;&gt;全局路由拦截器&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;拦截page页面的&lt;code&gt;onShow方法&lt;/code&gt;，判断是否有权限&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt; /**
+  * routerFillter --全局路由拦截器
+  * @function
+  * @param{Object} pageObj 当前页面的page对象
+  * @param{Boolean} flag 是否开启权限判断
+  */
+ exports.routerFilter = function (pageObj, flag = true) {
+     if (flag) {
+         pageObj.onShow = () =&amp;gt; {
+             if (!wx.getStorageSync(&#39;userInfo&#39;)) {
+                 let pages = getCurrentPages();
+                 let currPage = null;
+                 if (pages.length) {
+                     currPage = pages[pages.length - 1];
+                 }
+                 wx.setStorageSync(&#39;prevRouter&#39;, currPage.route) // 记录当前路由，用于登录完跳转回当前页面
+                  wx.redirectTo({
+                      url: &#39;/pages/auth/auth&#39;,
+                  })
+             }
+         }
+     }
+     return Page(pageObj)
+ }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;授权代码修改&#34;&gt;授权代码修改&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;成功后返回之前页面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;//检测授权登录
+getUserProfile() {
+    wx.getUserProfile({
+        desc: &#39;用于完善资料&#39;,
+        success: (res) =&amp;gt; {
+            this.setData({
+                &#39;userInfo.avatarUrl&#39;: res.userInfo.avatarUrl,
+                &#39;userInfo.gender&#39;: res.userInfo.gender,
+                &#39;userInfo.nickName&#39;: res.userInfo.nickName
+            })
+            wx.setStorageSync(&#39;userInfo&#39;, res.userInfo)
+            wx.navigateTo({
+                url: wx.getStorageSync(&#39;prevRouter&#39;), // 使用路由跳转
+                fail: () =&amp;gt; {
+                    wx.switchTab({
+                        url: &#39;/&#39; + wx.getStorageSync(&#39;prevRouter&#39;) // tab跳转
+                    })
+                }
+            })
+        },
+        fail() {
+            wx.removeStorageSync(&#39;userInfo&#39;)
+            wx.navigateBack({
+                delta: 1
+            })
+        }
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;使用拦截器&#34;&gt;使用拦截器&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;routerFillter 替换 Page&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;import {
+    routerFillter
+} from &#39;../../utils/filter.js&#39;;
+routerFillter({
+    // 内部和原来的Page一样
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;上面贴代码有点乱了，这里再写一下过程😘
+&lt;ul&gt;
+&lt;li&gt;编写授权页面，授权按钮绑定事件&lt;/li&gt;
+&lt;li&gt;在事件中 编写微信授权代码&lt;/li&gt;
+&lt;li&gt;在工具函数中创建 全局路由拦截器，编写函数&lt;/li&gt;
+&lt;li&gt;修改微信授权代码，处理路由跳转&lt;/li&gt;
+&lt;li&gt;在需要的页面中使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-29&lt;/font&gt;
+">微信小程序的路由拦截</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/bo-ke-ping-tai-hou-duan-kai-fa-ji-lu-tong-yong-mo-shi-kai-fa-yong-hu-dong-tai-jie-kou/"" data-c="
+          &lt;p&gt;*考虑到后面接口的编写都是一个套路，这里用一个用户动态接口的增删改查来当个模板吧，后面的接口，按这个格式修改一下就OK了❤️❤️❤️&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;创建用户动态表&#34;&gt;创建用户动态表&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;CREATE TABLE IF NOT EXISTS `moment`(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	content VARCHAR(1000) NOT NULL,
+    user_id INT NOT NULL,
+	createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updataAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	FOREIGN KEY(user_id) REFERENCES user(id)
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;创建动态路由&#34;&gt;创建动态路由&lt;/h2&gt;
+&lt;h3 id=&#34;创建-routermomentrouterjs-文件&#34;&gt;创建 router/moment.router.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Router = require(&#39;koa-router&#39;);
+
+const momentRouter = new Router({
+  prefix: &amp;quot;/moment&amp;quot;
+});
+
+momentRouter.post(&amp;quot;/&amp;quot;, (ctx) =&amp;gt; {
+  ctx.body = &amp;quot;创建动态&amp;quot;
+})
+
+module.exports = momentRouter;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;验证token是否有效-编辑-routermomentrouterjs&#34;&gt;验证token是否有效  编辑 router/moment.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { verifyAuth } = require(&#39;../middleware/auth.middleware&#39;);
+
+momentRouter.post(&amp;quot;/&amp;quot;, verifyAuth);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;新建-momentcontrollerjs-文件控制层连接路由和服务层&#34;&gt;新建 moment.controller.js 文件，控制层，连接路由和服务层&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const momentService = require(&#39;../service/moment.service&#39;);
+
+class MomentController {
+  // 创建动态
+  async create(ctx, next) {
+    // 1.获取用户信息
+    const user = ctx.user;
+    // 2.获取用户动态
+    const { content } = ctx.request.body;
+    // 3.操作数据库
+    const result = await momentService.create(user, content);
+    // 4.返回结果
+    ctx.body = result;
+  }
+}
+
+module.exports = new MomentController();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;新建-momentservicejs-文件服务层与数据库交互&#34;&gt;新建 moment.service.js 文件，服务层，与数据库交互&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const connection = require(&#39;../app/database&#39;);
+
+class MomentService {
+  // 创建动态
+  async create(user, content) {
+    // 1.插入数据库
+    try {
+      const sql = `insert into moment (content, user_id) values(?,?)`;
+      const result = await connection.execute(sql, [content, user.id]);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+module.exports = new MomentService();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;修改-routermomentrouterjs-文件&#34;&gt;修改 router/moment.router.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { verifyAuth } = require(&#39;../middleware/auth.middleware&#39;);
+const { create } = require(&#39;../controller/moment.controller&#39;);
+
+momentRouter.post(&amp;quot;/&amp;quot;, verifyAuth, create);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635299130391.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+*成功添加动态&lt;/p&gt;
+&lt;h2 id=&#34;获取某条动态&#34;&gt;获取某条动态&lt;/h2&gt;
+&lt;h3 id=&#34;添加路由编辑-momentrouterjs&#34;&gt;添加路由，编辑 moment.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { create, detail } = require(&#39;../controller/moment.controller&#39;);
+
+// 根据id获取某条动态
+momentRouter.get(&amp;quot;/:momentId&amp;quot;, detail)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-detail-方法编辑-momentcontrollerjs&#34;&gt;添加 detail 方法，编辑 moment.controller.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 动态详情
+async detail(ctx, next) {
+  // 1.获取动态id
+  const momentId = ctx.params.momentId;
+  // 2.查询数据库
+  const result = await momentService.getMomentById(momentId);
+  // 3.返回结果
+  ctx.body = result;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-getmomentbyid-方法编辑-servicemomentservicejs&#34;&gt;添加 getMomentById 方法，编辑 service/moment.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 根据id获取动态
+async getMomentById(momentId) {
+  try {
+    const statement = `select * from moment where id = ?`;
+    const result = await connection.execute(statement, [momentId]);
+    return result[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635299448408.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*成功获取动态&lt;/p&gt;
+&lt;h2 id=&#34;获取动态列表&#34;&gt;获取动态列表&lt;/h2&gt;
+&lt;h3 id=&#34;添加路由编辑-routermomentjs&#34;&gt;添加路由，编辑 router/moment.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { create, detail, list } = require(&#39;../controller/moment.controller&#39;);
+// 获取多条动态
+momentRouter.get(&amp;quot;/&amp;quot;, list);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-list-方法编辑-controllermomentcontrollerjs&#34;&gt;添加 list 方法，编辑 controller/moment.controller.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 动态列表
+async list(ctx, next) {
+  // 1.获取 offset/limit
+  const { offset, limit } = ctx.query;
+  // 2.查询数据
+  const result = await momentService.getMomentList(offset, limit);
+  // 3.返回结果
+  ctx.body = result;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-getmomentlist-方法编辑-servicemomentservicejs&#34;&gt;添加 getMomentList 方法，编辑 service/moment.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;  // 获取动态列表
+async getMomentList(offset, limit) {
+  try {
+    const statement = `SELECT 
+                        m.id id,
+                        m.content content, 
+                        m.createAt createTime,
+                        m.updataAt updataTime,
+                      JSON_OBJECT(&#39;id&#39;, u.id, &#39;nickname&#39;, u.nickname) user
+                      FROM moment m
+                      LEFT JOIN user u ON m.user_id = u.id
+                      LIMIT ?, ?`;
+    const result = await connection.execute(statement, [offset, limit]);
+    return result[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635299656042.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+*成功获取动态列表&lt;/p&gt;
+&lt;h2 id=&#34;修改一条动态&#34;&gt;修改一条动态&lt;/h2&gt;
+&lt;h3 id=&#34;添加路由编辑-routermomentrouterjs&#34;&gt;添加路由，编辑 router/moment.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { verifyAuth, verifyPermission } = require(&#39;../middleware/auth.middleware&#39;);
+const { create, detail, list, update } = require(&#39;../controller/moment.controller&#39;);
+
+// 修改一条动态
+/**
+verifyAuth : 验证token是否有效
+verifyPermission : 验证用户是否具备权限
+update : 更新动态
+*/
+momentRouter.patch(&amp;quot;/:momentId&amp;quot;, verifyAuth, verifyPermission, update);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-verifypermission-方法编写-middlewareauthmiddlewarejs&#34;&gt;添加 verifyPermission 方法，编写 middleware/auth.middleware.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const authService = require(&#39;../service/auth.service&#39;);
+
+// 验证用户操作权限
+const verifyPermission = async (ctx, next) =&amp;gt; {
+  // 1.获取参数
+  const [resourceKey] = Object.keys(ctx.params); // 操作的字段  momentId
+  const tableName = resourceKey.replace(&amp;quot;Id&amp;quot;, &amp;quot;&amp;quot;); // 操作的表名  moment
+  const resourceId = ctx.params[resourceKey]; // 操作字段的值  1
+  const { id } = ctx.user; // 当前用户id  1
+  // 2.查询是否具备权限
+  try {
+    const isPermission = await authService.checkResource(tableName, resourceId, id);
+    if (!isPermission) {// 没有权限
+      const error = new Error(errorTypes.UN_PERMISSION);
+      ctx.app.emit(&#39;error&#39;, error, ctx);
+    }
+    await next();
+  } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;编写-checkresource-方法-检测权限创建-serviceauthservicejs-文件&#34;&gt;编写 checkResource 方法， 检测权限，创建 service/auth.service.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const connection = require(&amp;quot;../app/database&amp;quot;);
+
+class AuthService {
+  // 查询动态权限
+  async checkResource(tableName, id, userId) {
+    try {
+      const statement = `select * from ${tableName} where id = ? and user_id = ?`;
+      const [result] = await connection.execute(statement, [id, userId]);
+      return result.length === 0 ? false : true;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+module.exports = new AuthService();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-update-方法修改动态编辑-servicemomentservicejs&#34;&gt;添加 update 方法，修改动态，编辑 service/moment.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 修改动态
+async update(content, momentId) {
+  try {
+    const statement = `UPDATE moment SET content = ? WHERE id = ?`;
+    const result = await connection.execute(statement, [content, momentId]);
+    return result[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635299905534.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*成功修改动态&lt;/p&gt;
+&lt;h2 id=&#34;删除一条动态&#34;&gt;删除一条动态&lt;/h2&gt;
+&lt;h3 id=&#34;添加路由编辑-routermomentrouterjs-2&#34;&gt;添加路由，编辑 router/moment.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { verifyAuth, verifyPermission } = require(&#39;../middleware/auth.middleware&#39;);
+const { create, detail, list, update, remove } = require(&#39;../controller/moment.controller&#39;);
+
+// 修改一条动态
+/**
+verifyAuth : 验证token是否有效
+verifyPermission : 验证用户是否具备权限
+update : 更新动态
+*/
+momentRouter.delete(&amp;quot;/:momentId&amp;quot;, verifyAuth, verifyPermission, remove);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-remove-方法修改动态编辑-controllermomentcontrollerjs&#34;&gt;添加 remove 方法，修改动态，编辑 controller/moment.controller.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 删除动态
+async remove(ctx, next) {
+  // 1.获取参数
+  const { momentId } = ctx.params;
+  // 2.删除动态
+  const result = await momentService.remove(momentId);
+  // 3.返回结果
+  ctx.body = result;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-remove-方法更新数据库编辑-servicemomentservicejs&#34;&gt;添加 remove 方法，更新数据库，编辑 service/moment.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 删除动态
+async remove(momentId) {
+  try {
+    const statement = `DELETE FROM moment WHERE id = ?`;
+    const result = await connection.execute(statement, [momentId]);
+    console.log(result);
+    return result[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635300142067.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*成功删除动态&lt;/p&gt;
+&lt;h2 id=&#34;动态-点赞取消点赞&#34;&gt;动态 点赞/取消点赞&lt;/h2&gt;
+&lt;h3 id=&#34;为-moment-表添加-点赞数-字段&#34;&gt;为 moment 表添加 点赞数 字段&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;ALTER TABLE `moment` ADD likes int(10) DEFAULT 0;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建动态点赞表&#34;&gt;创建动态点赞表&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;CREATE TABLE IF NOT EXISTS `support`(
+  moment_id INT NOT NULL,
+  user_id INT NOT NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加点赞路由编辑-routermomentrouterjs&#34;&gt;添加点赞路由，编辑 router/moment.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { create, detail, list, update, remove, support } = require(&#39;../controller/moment.controller&#39;);
+
+// 动态 点赞/取消点赞
+momentRouter.get(&amp;quot;/:momentId/support&amp;quot;, verifyAuth, support);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加-support-方法编辑-controllermomentcontrollerjs&#34;&gt;添加 support 方法，编辑 controller/moment.controller.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const supportService = require(&#39;../service/support.service&#39;);  
+
+// 点赞动态
+async support(ctx, next) {
+  // 1.获取参数
+  const { momentId } = ctx.params;
+  const { id } = ctx.user;
+  // 2.查询点赞表
+  const isSupport = await supportService.isSupport(momentId, id);
+  if (isSupport) {
+    // 已点赞, 需取消点赞
+    // 1.更新 点赞表 / 动态表
+    const result = await supportService.unSupport(momentId, id);
+    ctx.body = result;
+  } else {
+    // 未点赞, 需点赞
+    // 1.更新 点赞表 / 动态表
+    const result = await supportService.toSupport(momentId, id);
+    ctx.body = result;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;编写-issupport-tosupport-unsupport-方法创建-servicesupportservicejs&#34;&gt;编写 isSupport 、 toSupport 、 unSupport 方法，创建 service/support.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const connection = require(&amp;quot;../app/database&amp;quot;);
+
+class SupportService {
+
+  // 是否点赞
+  async isSupport(momentId, userId) {
+    try {
+      const statement = `SELECT moment_id, user_id FROM support WHERE moment_id = ? AND user_id = ?`;
+      const result = await connection.execute(statement, [momentId, userId]);
+      return result[0].length === 0 ? false : true;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // 点赞操作
+  async toSupport(momentId, userId) {
+    try {
+      // 操作点赞表
+      const statement1 = `INSERT INTO support (moment_id, user_id) values(?, ?)`;
+      // 操作动态表
+      const statement2 = `UPDATE moment SET likes = likes + 1 where id = ?`;
+      // 执行语句
+      await connection.execute(statement1, [momentId, userId]);
+      await connection.execute(statement2, [momentId]);
+      // 返回结果
+      return {
+        isSupport: true
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // 取消点赞操作
+  async unSupport(momentId, userId) {
+    try {
+      // 操作点赞表
+      const statement1 = `DELETE FROM support WHERE moment_id = ? AND user_id = ?`;
+      // 操作动态表
+      const statement2 = `UPDATE moment SET likes = likes - 1 where id = ?`;
+      // 执行语句
+      await connection.execute(statement1, [momentId, userId]);
+      await connection.execute(statement2, [momentId]);
+      // 返回结果
+      return {
+        isSupport: false
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+}
+
+module.exports = new SupportService();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635300458618.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;http://kevin5979.github.io/post-images/1635300390687.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;*动态接口基本完成&lt;/p&gt;
+&lt;h2 id=&#34;总结一下&#34;&gt;总结一下&lt;/h2&gt;
+&lt;h3 id=&#34;编写接口的几个步骤&#34;&gt;编写接口的几个步骤&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;创建数据库、表&lt;/li&gt;
+&lt;li&gt;创建路由 =&amp;gt; router.js&lt;/li&gt;
+&lt;li&gt;创建处理函数，(接收参数等操作 + 连接路由和数据库操作) =&amp;gt; controller.js&lt;/li&gt;
+&lt;li&gt;创建数据库操作函数 =&amp;gt; service.js&lt;/li&gt;
+&lt;li&gt;其余更多操作(如鉴权)，可使用中间件实现 =&amp;gt; auth.js&lt;/li&gt;
+&lt;/ol&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-27&lt;/font&gt;
+">博客平台后端开发记录 - 通用模式开发(用户动态接口)</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/bo-ke-ping-tai-hou-duan-kai-fa-ji-lu-yong-hu-deng-lu-jie-kou/"" data-c="
+          &lt;p&gt;周二，神清气爽，来，写点好康的👱‍♀，（之前注册接口的时候，密码还没有加密处理，这里先把密码加密存储后，再接着写登录逻辑）&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;用户注册时密码加密&#34;&gt;用户注册时密码加密&lt;/h2&gt;
+&lt;h3 id=&#34;创建-utilspassword-handlejs-文件&#34;&gt;创建 utils/password-handle.js 文件&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用于密码加密的工具函数 node 自带了 &lt;code&gt;crypto&lt;/code&gt;库，这里使用的是 非对称加密算法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const crypto = require(&#39;crypto&#39;);
+
+// 密码加密
+const md5password = (password) =&amp;gt; {
+  const md5 = crypto.createHash(&#39;md5&#39;);
+  const result = md5.update(password).digest(&#39;hex&#39;);
+  return result;
+}
+
+module.exports = md5password;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;编辑-middlewareusermiddlewarejs-文件-中间件&#34;&gt;编辑 middleware/user.middleware.js 文件, 中间件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const md5password = require(&amp;quot;../utils/password-handle&amp;quot;);
+
+// verifyUser...
+
+// 密码加密
+const handlePassword = async (ctx, next) =&amp;gt; {
+  let { password } = ctx.request.body;
+  ctx.request.body.password = md5password(password);
+  await next();
+}
+
+module.exports = {
+  verifyUser,
+  handlePassword
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加中间件-routeruserrouterjs&#34;&gt;添加中间件 router/user.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Router = require(&#39;koa-router&#39;);
+// 导入控制层
+const { create } = require(&#39;../controller/user.controller&#39;); 
+// 中间件
+const { verifyUser, handlePassword } = require(&#39;../middleware/user.middleware&#39;);
+
+const userRouter = new Router({ prefix: &amp;quot;/users&amp;quot; }); // 添加路由前缀
+
+userRouter.post(&amp;quot;/&amp;quot;, verifyUser, handlePassword, create);
+
+module.exports = userRouter;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635212321941.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635212331358.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*密码加密完成&lt;/p&gt;
+&lt;h2 id=&#34;用户登录接口编写&#34;&gt;用户登录接口编写&lt;/h2&gt;
+&lt;h3 id=&#34;创建登录路由-添加-routerauthrouterjs-文件&#34;&gt;创建登录路由 添加 router/auth.router.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Router = require(&#39;koa-router&#39;);
+
+const authRouter = new Router({ prefix: &amp;quot;/auth&amp;quot; });
+
+// 登录
+authRouter.post(&amp;quot;/login&amp;quot;, (ctx)=&amp;gt;{
+  ctx.body = &amp;quot;用户登录&amp;quot;
+});
+
+module.exports = authRouter;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建中间件-middlewareauthmiddlewarejs-文件&#34;&gt;创建中间件 middleware/auth.middleware.js 文件&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用户验证用户登录
+&lt;ul&gt;
+&lt;li&gt;获取用户名、密码&lt;/li&gt;
+&lt;li&gt;判断用户名、密码不为空&lt;/li&gt;
+&lt;li&gt;判断用户是否存在&lt;/li&gt;
+&lt;li&gt;判断密码是否正确&lt;/li&gt;
+&lt;li&gt;登录成功，进行下一步&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const errorTypes = require(&#39;../constants/error-types&#39;);
+const userService = require(&#39;../service/user.service&#39;);
+const md5password = require(&amp;quot;../utils/password-handle&amp;quot;);
+
+// 登录校验
+const verifyLogin = async (ctx, next) =&amp;gt; {
+
+  // 1.获取用户名、密码
+  const { nickname, password } = ctx.request.body;
+  // 2.判断用户名、密码不为空
+  if (!nickname || !password) {
+    const error = new Error(errorTypes.NICKNAME_OR_PASSWORD_IS_REQUIRED);
+    return ctx.app.emit(&#39;error&#39;, error, ctx)
+  }
+  // 3.判断用户是否存在
+  const result = await userService.getUserByNickname(nickname);
+  if (result.length === 0) {
+    const error = new Error(errorTypes.USER_DOES_NOT_EXISTS);
+    return ctx.app.emit(&#39;error&#39;, error, ctx);
+  }
+  // 4.判断密码是否正确
+  if (md5password(password) !== result[0].password) {
+    const error = new Error(errorTypes.PASSWORD_IS_INCORRENT);
+    return ctx.app.emit(&#39;error&#39;, error, ctx);
+  }
+
+  ctx.user = result[0];  // 保存用户
+  console.log(&amp;quot;登录成功&amp;quot;);
+  // 5.进行下一步 
+  await next();
+
+}
+
+module.exports = {
+  verifyLogin
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;应用中间件-编辑-routerauthrouterjs-文件&#34;&gt;应用中间件 编辑 router/auth.router.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 登录
+authRouter.post(&amp;quot;/login&amp;quot;, verifyLogin, (ctx) =&amp;gt; {
+  ctx.body = &amp;quot;登录成功&amp;quot;;
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635212750762.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h2 id=&#34;登录添加token-验证机制&#34;&gt;登录添加token 验证机制&lt;/h2&gt;
+&lt;h3 id=&#34;安装-jsonwebtoken-库&#34;&gt;安装 jsonwebtoken 库&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i jsonwebtoken
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;openssl-生成-公钥和私钥&#34;&gt;openssl 生成 公钥和私钥&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;私钥用户生成token，公钥用户验证token
+&lt;ul&gt;
+&lt;li&gt;创建文件夹 app/keys 文件夹, 并进入keys文件夹&lt;/li&gt;
+&lt;li&gt;keys 文件夹下打开 gitbash&lt;/li&gt;
+&lt;li&gt;gitbash输入 &lt;code&gt;openssl&lt;/code&gt; 进入输入&lt;/li&gt;
+&lt;li&gt;gitbash 输入 &lt;code&gt;genrsa -out private.key 1024&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;gitbash 再输入 &lt;code&gt;rsa -in private.key -pubout -out public.key&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;keys 文件夹下多出公钥和私钥&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;配置环境变量-编辑-appconfigjs&#34;&gt;配置环境变量 编辑 app/config.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const fs = require(&#39;fs&#39;);
+const path = require(&#39;path&#39;);
+
+const PRIVATE_KEY = fs.readFileSync(path.resolve(__dirname, &#39;./keys/private.key&#39;));
+const PUBLIC_KEY = fs.readFileSync(path.resolve(__dirname, &#39;./keys/public.key&#39;));
+// 添加公钥和私钥到应用环境中
+module.exports.PRIVATE_KEY = PRIVATE_KEY;
+module.exports.PUBLIC_KEY = PUBLIC_KEY;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建-controlleauthcontrollerjs&#34;&gt;创建 controlle/auth.controller.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const jwt = require(&#39;jsonwebtoken&#39;);
+const { PRIVATE_KEY } = require(&#39;../app/config&#39;);
+
+class AuthController {
+  login(ctx, next) {  // 生成token
+    // 1.获取用户信息
+    const { id, nickname } = ctx.user;
+    // 2.生成token
+    const token = jwt.sign({ id, nickname }, PRIVATE_KEY, {
+      expiresIn: 60 * 60 * 24,  // 过期时间
+      algorithm: &#39;RS256&#39;  // 加密方式
+    })
+    // 3.返回数据
+    ctx.body = { id, nickname, token };
+  }
+}
+
+module.exports = new AuthController();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;修改-authrouterjs-文件&#34;&gt;修改 auth.router.js 文件&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;登录之后返回 token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { verifyLogin } = require(&#39;../middleware/auth.middleware&#39;);
+
+authRouter.post(&amp;quot;/login&amp;quot;, verifyLogin, login, (ctx) =&amp;gt; {
+  ctx.body = &amp;quot;登录成功&amp;quot;;
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;4&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635213352008.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*成功生成 token&lt;/p&gt;
+&lt;h2 id=&#34;验证token操作&#34;&gt;验证token操作&lt;/h2&gt;
+&lt;h3 id=&#34;错误处理常量-编辑-constantserror-typesjs-文件&#34;&gt;错误处理常量 编辑 constants/error-types.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const UN_AUTHORIZED = &#39;un_authorized&#39;;
+module.exports = {
+  UN_AUTHORIZED
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加错误处理-编辑apperror-handlejs&#34;&gt;添加错误处理 编辑app/error-handle.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;case errorTypes.UN_AUTHORIZED:
+      status = 401;  // Bad Request -&amp;gt; 参数冲突/错误
+      message = &amp;quot;无效的token&amp;quot;;
+      break;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;验证token-编写-middlewareauthmiddlewarejs&#34;&gt;验证token 编写 middleware/auth.middleware.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const { PUBLIC_KEY } = require(&#39;../app/config&#39;);
+// verifyLogin ...
+
+// 验证token是否有效
+const verifyAuth = async (ctx, next) =&amp;gt; {
+  // 1.获取token
+  const authorization = ctx.headers.authorization;
+  if (!authorization) {
+    // 没有传token
+    const error = new Error(errorTypes.UN_AUTHORIZED);
+    return ctx.app.emit(&#39;error&#39;, error, ctx);
+  }
+  const token = authorization.replace(&amp;quot;Bearer &amp;quot;, &amp;quot;&amp;quot;);
+
+  // 2.验证token
+  try {
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: [&amp;quot;RS256&amp;quot;]
+    });
+    ctx.user = result;
+    await next();
+  } catch (err) {
+    // 错误/过期 的 token
+    const error = new Error(errorTypes.UN_AUTHORIZED);
+    ctx.app.emit(&#39;error&#39;, error, ctx);
+  }
+}
+
+module.exports = {
+  verifyLogin,
+  verifyAuth
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;*登录部分基本完成&lt;/p&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-26&lt;/font&gt;
+">博客平台后端开发记录 - 用户登录接口</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/bo-ke-ping-tai-hou-duan-kai-fa-ji-lu-yong-hu-zhu-ce-jie-kou/"" data-c="
+          &lt;p&gt;周末，接着写篇文章😄&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;获取参数&#34;&gt;获取参数&lt;/h2&gt;
+&lt;h3 id=&#34;创建用户表&#34;&gt;创建用户表&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mysql&#34;&gt;CREATE TABLE IF NOT EXISTS `user`(
+	id int PRIMARY KEY AUTO_INCREMENT,
+	nickname VARCHAR(30) NOT NULL UNIQUE,
+    password VARCHAR(50) NOT NULL,
+	createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;安装-koa-bodyparser-库处理-post-参数&#34;&gt;安装 koa-bodyparser 库，处理 post 参数&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i koa-bodyparser
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;添加路由-routeruserrouterjs&#34;&gt;添加路由 router/user.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;userRouter.post(&amp;quot;/&amp;quot;, async (ctx) =&amp;gt; {
+  const user = ctx.request.body;  // 获取post参数
+  ctx.body = user;  // 返回参数
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;修改-appindexjs文件&#34;&gt;修改 app/index.js文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Koa = require(&#39;koa&#39;);
+const bodyParser = require(&#39;koa-bodyparser&#39;);
+const useRoutes = require(&amp;quot;../router&amp;quot;);
+
+const app = new Koa();
+// 注册中间件
+app.use(bodyParser());
+// 注册路由
+useRoutes(app);
+
+module.exports = app;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635065540232.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+*成功获得参数&lt;/p&gt;
+&lt;h2 id=&#34;拆分代码&#34;&gt;拆分代码&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;请求的路径&lt;/code&gt; ： postman 发出请求 =&amp;gt; user.router.js 接收请求 =&amp;gt; user.controller.js  处理参数 =&amp;gt; user.service.js 与数据库交互，保存用户&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;响应的路径&lt;/code&gt; ： user.service.js 保存用户，返回信息 =&amp;gt; user.controller.js 处理返回信息 =&amp;gt; user.router.js 返回结果&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;user.router.js&lt;/code&gt; : router层  ==&amp;gt;  提供接口&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;user.controller.js&lt;/code&gt; : controller层  ==&amp;gt;  处理参数 / 处理返回信息 / (连接 router层 和 service层)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;user.service.js&lt;/code&gt; : service层  ==&amp;gt;  与数据库打交道&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;修改-routeruserrouterjs-文件&#34;&gt;修改 router/user.router.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Router = require(&#39;koa-router&#39;);
+const { create } = require(&#39;../controller/user.controller&#39;); // 导入控制层
+
+const userRouter = new Router({ prefix: &amp;quot;/users&amp;quot; }); // 添加路由前缀
+
+userRouter.post(&amp;quot;/&amp;quot;, create);
+
+module.exports = userRouter;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建-controller-层controllerusercontrollerjs&#34;&gt;创建 controller 层，controller/user.controller.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;class UserController {
+
+  // 创建用户
+  async create(ctx, next) {
+    // 1.获取用户的参数
+    const user = ctx.request.body;
+    // 2.检测/插入数据
+    const result = await userService.create(user);
+    // 3.返回数据
+    ctx.body = result;
+  }
+
+}
+
+module.exports = new UserController();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建-service-层-serviceuserservicejs&#34;&gt;创建 service 层， service/user.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;class userService {
+  // 将user存储到数据库
+  async create(user) {
+    console.log(&amp;quot;userService 操作数据库，保存用户&amp;quot;);
+    return user;
+  }
+}
+
+module.exports = new userService();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635065872755.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*拆分代码&lt;/p&gt;
+&lt;h2 id=&#34;数据库保存用户&#34;&gt;数据库保存用户&lt;/h2&gt;
+&lt;h3 id=&#34;修改-serviceuserservicejs-文件&#34;&gt;修改 service/user.service.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 将user存储到数据库
+async create(user) {
+  const { nickname, password } = user;
+  try {
+    const statement = `insert into user (nickname, password) values (?,?)`;  // 定义sql语句
+    const result = await connection.execute(statement, [nickname, password]);  // 执行sql语句
+    return result[0];  // 返回结果
+  } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635065949525.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635065956986.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*用户数据成功插入数据库&lt;/p&gt;
+&lt;h2 id=&#34;添加用户验证中间件&#34;&gt;添加用户验证中间件&lt;/h2&gt;
+&lt;h3 id=&#34;根据-nickname-查询用户是否已经注册-serviceuserservicejs&#34;&gt;根据 nickname 查询用户是否已经注册 service/user.service.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;  // 根据用户名返回用户
+async getUserByNickname(nickname) {
+  try {
+      const statement = `select * from user where nickname = ?`;
+      const result = await connection.execute(statement, [nickname]);
+      return result[0];
+    } catch (error) {
+    console.log(error);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建-middlewareusermiddlewarejs-文件&#34;&gt;创建 middleware/user.middleware.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const userService = require(&#39;../service/user.service&#39;);
+
+// 验证用户
+const verifyUser = async (ctx, next) =&amp;gt; {
+  // 1.获取用户名, 密码
+  const { nickname, password } = ctx.request.body;
+  // 2.判断用户名, 密码不为空
+  if (!nickname || !password) {
+    ctx.body = &amp;quot;用户名/密码为空&amp;quot;;
+  }
+
+  // 3.判断用户名不重复
+  const result = await userService.getUserByNickname(nickname);
+  if (result.length &amp;gt; 0) {
+    ctx.body = &amp;quot;该用户已经注册&amp;quot;;
+  }
+  // 4.验证通过
+  await next();
+}
+
+module.exports = {
+  verifyUser
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;应用中间件-routeruserrouterjs&#34;&gt;应用中间件 router/user.router.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Router = require(&#39;koa-router&#39;);
+const { verifyUser } = require(&#39;../middleware/user.middleware&#39;);
+const { create } = require(&#39;../controller/user.controller&#39;); // 导入控制层
+
+const userRouter = new Router({ prefix: &amp;quot;/users&amp;quot; }); // 添加路由前缀
+
+userRouter.post(&amp;quot;/&amp;quot;, verifyUser, create);
+
+module.exports = userRouter;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;4&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635066138983.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*中间件的使用&lt;/p&gt;
+&lt;h2 id=&#34;错误处理&#34;&gt;错误处理&lt;/h2&gt;
+&lt;h3 id=&#34;创建-constantserror-typesjs-文件&#34;&gt;创建 constants/error-types.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const NICKNAME_ORPASSWORD_IS_REQUIRED = &#39;nickname_or_password_is_required&#39;;
+const USER_ALREADY_EXISTS = &#39;user_already_exists&#39;;
+
+module.exports = {
+  NAME_ORPASSWORD_IS_REQUIRED,
+  USER_ALREADY_EXISTS,
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;创建-apperrorhandlejs-文件&#34;&gt;创建 app/errorhandle.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const errorTypes = require(&#39;../constants/error-types&#39;);
+
+const errorHandler = (error, ctx) =&amp;gt; {
+  let status, message;
+
+  switch (error.message) {
+    case errorTypes.NICKNAME_ORPASSWORD_IS_REQUIRED:
+      status = 400;  // Bad Request -&amp;gt; 参数有问题
+      message = &amp;quot;用户名或密码不能为空~&amp;quot;;
+      break;
+    case errorTypes.USER_ALREADY_EXISTS:
+      status = 409;  // Conflict -&amp;gt; 参数冲突
+      message = &amp;quot;该用户已注册~&amp;quot;;
+      break;
+    default:
+      status = 404;
+      message = &amp;quot;NOT FOUND&amp;quot;;
+  }
+
+  ctx.status = status;
+  ctx.body = message;
+}
+
+module.exports = errorHandler;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;修改-appindexjs-文件&#34;&gt;修改 app/index.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Koa = require(&#39;koa&#39;);
+const bodyParser = require(&#39;koa-bodyparser&#39;);
+// 路由处理
+const useRoutes = require(&amp;quot;../router&amp;quot;);
+// 错误处理
+const errorHandler = require(&amp;quot;./error-handle&amp;quot;);
+
+const app = new Koa();
+
+// 注册中间件
+app.use(bodyParser());
+
+// 注册路由
+useRoutes(app);
+
+// 监听错误处理
+app.on(&#39;error&#39;, errorHandler);
+
+module.exports = app;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;修改-middlewareusermiddlewarejs-文件&#34;&gt;修改 middleware/user.middleware.js 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const userService = require(&#39;../service/user.service&#39;);
+const errorTypes = require(&#39;../constants/error-types&#39;);
+
+// 验证用户
+const verifyUser = async (ctx, next) =&amp;gt; {
+  // 1.获取用户名, 密码
+  const { nickname, password } = ctx.request.body;
+  // 2.判断用户名, 密码不为空
+  if (!nickname || !password) {
+    const error = new Error(errorTypes.NICKNAME_OR_PASSWORD_IS_REQUIRED);
+    return ctx.app.emit(&#39;error&#39;, error, ctx);
+  }
+  // 3.判断用户名不重复
+  const result = await userService.getUserByNickname(nickname);
+  if (result.length &amp;gt; 0) {
+    const error = new Error(errorTypes.USER_ALREADY_EXISTS);
+    return ctx.app.emit(&#39;error&#39;, error, ctx);
+  }
+  // 4.验证通过
+  await next();
+}
+
+module.exports = {
+  verifyUser
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;5&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635066295450.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;6&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1635066300696.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;*错误处理&lt;/p&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-24&lt;/font&gt;
+">博客平台后端开发记录 - 用户注册接口</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/bo-ke-ping-tai-hou-duan-kai-fa-ji-lu-node-lian-jie-mysql-shu-ju-ku/"" data-c="
+          &lt;p&gt;🙏🙏🙏感冒终于好了呀，天气转冷，想买件衣服（人靠衣装😃），最近上班事情挺多，难度倒是不大，勇敢的打工人从不怕困难👏，书接上回，今天偷点上班时间，写下这个记录~😘&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3 id=&#34;安装mysql2插件&#34;&gt;安装&lt;code&gt;mysql2&lt;/code&gt;插件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i mysql2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;往-env文件-添加环境变量&#34;&gt;往 .env文件 添加环境变量&lt;/h3&gt;
+&lt;p&gt;根目录新建 &lt;code&gt;.env 文件&lt;/code&gt;，编写数据库连接相关的参数&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DATABASE=cmiss
+MYSQL_USER=root
+MYSQL_PASSWORD=root
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;修改-appconfigjs-文件&#34;&gt;修改 app/config.js 文件&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;dotenv 库&lt;/code&gt;直接 &lt;code&gt;npm&lt;/code&gt;安装 就行，将程序的环境变量配置写在 &lt;code&gt;process.env&lt;/code&gt;中，并导出&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const dotenv = require(&#39;dotenv&#39;);  // 默认读取项目根目录下的.env文件
+dotenv.config();
+// 将配置信息写入到环境变量
+module.exports = {
+  APP_HOST,
+  APP_PORT,
+  MYSQL_HOST,
+  MYSQL_PORT,
+  MYSQL_DATABASE,
+  MYSQL_USER,
+  MYSQL_PASSWORD,
+} = process.env;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;新建-appdatabasejs-文件&#34;&gt;新建 app/database.js 文件&lt;/h3&gt;
+&lt;h4 id=&#34;导入mysql驱动和配置&#34;&gt;导入mysql驱动和配置&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const mysql = require(&#39;mysql2&#39;);
+const config = require(&amp;quot;./config&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;创建数据库连接池&#34;&gt;创建数据库连接池&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const connections = mysql.createPool({
+  host: config.MYSQL_HOST,
+  port: config.MYSQL_PORT,
+  user: config.MYSQL_USER,
+  database: config.MYSQL_DATABASE,
+  password: config.MYSQL_PASSWORD
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;测试数据库连接&#34;&gt;测试数据库连接&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;connections.getConnection((err, conn) =&amp;gt; {
+  conn.connect(err =&amp;gt; {
+    if (err) {
+      console.log(&amp;quot;数据库连接失败~&amp;quot;);
+    } else {
+      console.log(&amp;quot;数据库连接成功~&amp;quot;);
+    }
+  })
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;以promiss的方式导出连接池&#34;&gt;以promiss的方式导出连接池&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = connections.promise();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;新建数据库&#34;&gt;新建数据库&lt;/h3&gt;
+&lt;p&gt;使用&lt;code&gt;Navicat for MySQL&lt;/code&gt;软件来新建mysql数据库&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mysql&#34;&gt;ceate database cmiss;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;在-mianjs-加载数据库&#34;&gt;在 mian.js 加载数据库&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;require(&#39;./app/database&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;重新启动node&#34;&gt;重新启动node&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm start
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1634799888457.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-21&lt;/font&gt;
+">博客平台后端开发记录 - node 连接 mysql 数据库</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/bo-ke-ping-tai-hou-duan-kai-fa-ji-lu-less1greater/"" data-c="
+          &lt;p&gt;最近感冒快好了（不容易啊）🤣🤣，有时间赶紧记录一些自己写过的代码，接下来是整理&lt;code&gt;博客平台后端开发&lt;/code&gt;的详细步骤~&lt;br&gt;
+ps: 最近降温了，各位多添件衣服，身体好比啥都强😘&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3 id=&#34;新建一个空的项目&#34;&gt;新建一个空的项目&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;前提： 电脑安装有较高版本的node + mysql8，新建一个空的文件夹 （cmeet），用vscode或任意编译器打开, 在文件夹下打开控制台&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;控制台操作&#34;&gt;控制台操作&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;创建package.json文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm init -y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;安装&lt;code&gt;nodemon&lt;/code&gt;热更新项目&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i nodemon --save-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;安装&lt;code&gt;koa&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i koa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;新建文件夹&#34;&gt;新建文件夹&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;src : 放置源代码的地方&lt;/li&gt;
+&lt;li&gt;src/app : 接口的基本配置&lt;/li&gt;
+&lt;li&gt;src/constants : 放置常量&lt;/li&gt;
+&lt;li&gt;src/controller : 控制器&lt;/li&gt;
+&lt;li&gt;src/middleware : 中间件&lt;/li&gt;
+&lt;li&gt;src/router : 处理路由&lt;/li&gt;
+&lt;li&gt;src/service : 提供服务&lt;/li&gt;
+&lt;li&gt;src/utils : 工具函数&lt;/li&gt;
+&lt;li&gt;src/main.js : 入口文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;修改-packagejson-文件&#34;&gt;修改 &lt;code&gt;package.json&lt;/code&gt; 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;cmiss_blog&amp;quot;,
+  &amp;quot;version&amp;quot;: &amp;quot;1.0.0&amp;quot;,
+  &amp;quot;description&amp;quot;: &amp;quot;&amp;quot;,
+  &amp;quot;main&amp;quot;: &amp;quot;index.js&amp;quot;,
+  &amp;quot;scripts&amp;quot;: {
+    &amp;quot;test&amp;quot;: &amp;quot;echo \&amp;quot;Error: no test specified\&amp;quot; &amp;amp;&amp;amp; exit 1&amp;quot;,
+    &amp;quot;start&amp;quot;: &amp;quot;nodemon ./src/main.js&amp;quot;
+  },
+  &amp;quot;author&amp;quot;: &amp;quot;&amp;quot;,
+  &amp;quot;license&amp;quot;: &amp;quot;ISC&amp;quot;,
+  &amp;quot;devDependencies&amp;quot;: {
+    &amp;quot;nodemon&amp;quot;: &amp;quot;^2.0.7&amp;quot;
+  },
+  &amp;quot;dependencies&amp;quot;: {
+    &amp;quot;koa&amp;quot;: &amp;quot;^2.13.1&amp;quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;编写入口文件-mainjs&#34;&gt;编写入口文件 main.js&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Koa = require(&amp;quot;koa&amp;quot;);
+const app = new Koa();
+
+const path = 3001;  // 定义端口
+
+//配置koa中间件
+app.use(async (ctx) =&amp;gt; {
+  ctx.body = &#39;hello koa&#39;
+})
+
+//监听端口
+app.listen(path,()=&amp;gt;{
+  console.log(`service run at http://localhost:${path}`)
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;启动node&#34;&gt;启动node&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;npm start&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1634526870386.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1634526880207.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h3 id=&#34;配置环境变量&#34;&gt;配置环境变量&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;安装&lt;code&gt;dotenv&lt;/code&gt;库&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i dotenv
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;创建 &lt;code&gt;.env&lt;/code&gt; 文件，与src文件夹同级&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;APP_HOST=http://localhost
+APP_PORT=3001
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;创建 app/config.js 文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt; const dotenv = require(&#39;dotenv&#39;);
+ dotenv.config();
+ 
+ // 将配置信息写入到环境变量
+ module.exports = {
+   APP_HOST,
+   APP_PORT
+ } = process.env;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;修改 main.js 文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Koa = require(&amp;quot;koa&amp;quot;);
+// 获取配置文件
+const config = require(&#39;./app/config&#39;);
+const app = new Koa();
+//配置koa中间件
+app.use(async (ctx) =&amp;gt; {
+    ctx.body = &#39;hello koa&#39;
+})
+// 监听端口
+app.listen(config.APP_PORT, () =&amp;gt; {
+    console.log(`Server run at ${config.APP_HOST}:${config.APP_PORT}`)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;配置koa路由&#34;&gt;配置koa路由&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;安装 &lt;code&gt;koa-router&lt;/code&gt;库&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;npm i koa-router
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;修改main.js文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Koa = require(&#39;koa&#39;);
+const Router = require(&#39;koa-router&#39;);
+ 
+// 获取配置文件
+const config = require(&#39;./app/config&#39;);
+ 
+const app = new Koa();
+const router = new Router();
+ 
+router.get(&amp;quot;/user&amp;quot;, async (ctx) =&amp;gt; {
+   ctx.body = &amp;quot;&amp;lt;h2&amp;gt;cmiss&amp;lt;/h2&amp;gt;&amp;quot;;
+})
+ 
+// 使用路由
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+// 监听端口
+app.listen(config.APP_PORT, () =&amp;gt; {
+   console.log(`Server run at ${config.APP_HOST}:${config.APP_PORT}`)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1634526889502.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h3 id=&#34;配置动态路由&#34;&gt;配置动态路由&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;创建 router/index.js文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const fs = require(&#39;fs&#39;);
+  
+// 动态路由
+const useRoutes = (app) =&amp;gt; {
+    fs.readdirSync(__dirname).forEach((file) =&amp;gt; {
+        if (file === &amp;quot;index.js&amp;quot;) return;  // 跳过当前文件
+        const router = require(`./${file}`);
+        app.use(router.routes());
+        app.use(router.allowedMethods());
+    })
+}
+module.exports = useRoutes;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;创建测试路由 router/user.router.js&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Router = require(&#39;koa-router&#39;);
+const userRouter = new Router({ prefix: &amp;quot;/users&amp;quot; }); // 添加路由前缀
+  
+userRouter.get(&amp;quot;/&amp;quot;, async (ctx) =&amp;gt; {
+    ctx.body = &amp;quot;动态路由加载成功 =&amp;gt; users&amp;quot;;
+});
+  
+module.exports = userRouter;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;创建 app/index.js 文件抽取main.js 的代码&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Koa = require(&#39;koa&#39;);
+const useRoutes = require(&amp;quot;../router&amp;quot;);
+const app = new Koa();
+  
+// 注册路由
+useRoutes(app);
+module.exports = app;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;修改 mian.js 文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const app = require(&#39;./app&#39;);
+  
+// 获取配置文件
+const config = require(&#39;./app/config&#39;);
+  
+// 监听端口
+app.listen(config.APP_PORT, () =&amp;gt; {
+    console.log(`Server run at ${config.APP_HOST}:${config.APP_PORT}`)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;4&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1634526904641.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-18&lt;/font&gt;
+">博客平台后端开发记录 - 基本的环境配置</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/bo-ke-hou-duan-kai-fa-jin-cheng-biao/"" data-c="
+          &lt;p&gt;这是挺久之前我开发的大众博客交互平台，现在把后端开发的记录文档记录一下，后面类似需求可以来这里找找😊😊😊&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;创建基本开发环境&#34;&gt;创建基本开发环境   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;基本文件夹创建&lt;/li&gt;
+&lt;li&gt;node 服务器热更新  （&lt;code&gt;nodemon&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;配置应用的环境变量  （&lt;code&gt;dotenv&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;配置动态加载路由  （&lt;code&gt;koa-router&lt;/code&gt; 和 &lt;code&gt;fs 模块&lt;/code&gt;结合）&lt;/li&gt;
+&lt;li&gt;node 连接 mysql  （&lt;code&gt;mysql2&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;错误处理 （node 自定义事件, app.on/ctx.app.emit）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;注册接口开发&#34;&gt;注册接口开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql 创建数据库和用户表&lt;/li&gt;
+&lt;li&gt;koa-bodyparser 解析参数&lt;/li&gt;
+&lt;li&gt;mysql2 的封装&lt;/li&gt;
+&lt;li&gt;代码分层处理  （router -&amp;gt; controller -&amp;gt; service）&lt;/li&gt;
+&lt;li&gt;中间件的使用  （middleware）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;登录接口开发&#34;&gt;登录接口开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;密码加密  （md5）&lt;/li&gt;
+&lt;li&gt;验证登录中间件&lt;/li&gt;
+&lt;li&gt;生成/验证 token  （jwt，非对称加密）&lt;/li&gt;
+&lt;li&gt;生成 公钥/私钥   （openssl）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;动态接口开发&#34;&gt;动态接口开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;发布动态&lt;/li&gt;
+&lt;li&gt;查询单条动态    （联合查询）&lt;/li&gt;
+&lt;li&gt;查询多条动态&lt;/li&gt;
+&lt;li&gt;修改动态    （权限判断）&lt;/li&gt;
+&lt;li&gt;删除动态&lt;/li&gt;
+&lt;li&gt;动态 点赞/取消点赞&lt;/li&gt;
+&lt;li&gt;动态添加标签&lt;/li&gt;
+&lt;li&gt;动态添加 图片/音频/视频    （延后开发）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;评论接口开发&#34;&gt;评论接口开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;发表评论&lt;/li&gt;
+&lt;li&gt;删除评论    （多级数据联动）&lt;/li&gt;
+&lt;li&gt;评论 点赞/取消点赞&lt;/li&gt;
+&lt;li&gt;回复评论&lt;/li&gt;
+&lt;li&gt;获取评论列表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;标签分类开发&#34;&gt;标签分类开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;新建标签&lt;/li&gt;
+&lt;li&gt;标签+动态 权限验证&lt;/li&gt;
+&lt;li&gt;标签与动态关联&lt;/li&gt;
+&lt;li&gt;获取全部标签&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;文件上传开发&#34;&gt;文件上传开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用户更换头像&lt;/li&gt;
+&lt;li&gt;动态添加图片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;我的资料开发&#34;&gt;我的资料开发    √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;修改资料&lt;/li&gt;
+&lt;li&gt;修改头像&lt;/li&gt;
+&lt;li&gt;添加/更换壁纸&lt;/li&gt;
+&lt;li&gt;设置密保问题&lt;/li&gt;
+&lt;li&gt;微信/QQ登录   （延后开发）&lt;/li&gt;
+&lt;li&gt;隐私设置&lt;/li&gt;
+&lt;li&gt;注销账号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;关注用户开发&#34;&gt;关注用户开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;关注用户&lt;/li&gt;
+&lt;li&gt;查询用户&lt;/li&gt;
+&lt;li&gt;取消关注&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;文章接口开发&#34;&gt;文章接口开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;创建文章分类&lt;/li&gt;
+&lt;li&gt;文章的添加、修改、删除&lt;/li&gt;
+&lt;li&gt;点赞文章&lt;/li&gt;
+&lt;li&gt;权限开关&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;文章评论开发&#34;&gt;文章评论开发   √&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;评论添加 / 删除&lt;/li&gt;
+&lt;li&gt;点赞评论&lt;/li&gt;
+&lt;li&gt;回复评论&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;即时通讯开发&#34;&gt;即时通讯开发&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用户之间发送消息&lt;/li&gt;
+&lt;li&gt;系统消息推送&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;媒体接口开发&#34;&gt;媒体接口开发&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;添加音乐&lt;/li&gt;
+&lt;li&gt;添加视频&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-17&lt;/font&gt;
+">博客后端开发进程表</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/react-shi-yong-craco-xiu-gai-xiang-mu-pei-zhi/"" data-c="
+          &lt;p&gt;由于&lt;code&gt;react&lt;/code&gt;脚手架中把&lt;code&gt;webpack&lt;/code&gt;配置都隐藏起来了，我们修改起来不太方便，于是，记录一下使用&lt;code&gt;craco&lt;/code&gt;来修改配置的方法&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;安装-craco&#34;&gt;安装 craco&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;yarn add @craco/craco
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;修改packagejson文件&#34;&gt;修改package.json文件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;使用&lt;code&gt;craco&lt;/code&gt;启动项目&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;&amp;quot;scripts&amp;quot;: {
+-   &amp;quot;start&amp;quot;: &amp;quot;react-scripts start&amp;quot;,
+-   &amp;quot;build&amp;quot;: &amp;quot;react-scripts build&amp;quot;,
+-   &amp;quot;test&amp;quot;: &amp;quot;react-scripts test&amp;quot;,
+    &amp;quot;eject&amp;quot;: &amp;quot;react-scripts eject&amp;quot;,
++   &amp;quot;start&amp;quot;: &amp;quot;craco start&amp;quot;,
++   &amp;quot;build&amp;quot;: &amp;quot;craco build&amp;quot;,
++   &amp;quot;test&amp;quot;: &amp;quot;craco test&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;在根目录下创建cracoconfigjs文件&#34;&gt;在根目录下创建craco.config.js文件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;craco.config.js文件用于修改默认配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;应用-craco配置别名&#34;&gt;应用: craco配置别名&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const path = require(&amp;quot;path&amp;quot;);
+const resolve = dir =&amp;gt; path.resolve(__dirname, dir);
+
+module.exports = {
+  // 其它配置...
+  ,
+  webpack: {
+    alias: {
+      &#39;@&#39;: resolve(&amp;quot;src&amp;quot;),
+      &#39;components&#39;: resolve(&amp;quot;src/components&amp;quot;),
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;重启项目生效&#34;&gt;重启项目生效&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;yarn start
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-11&lt;/font&gt;&lt;/p&gt;
+">react: 使用craco修改项目配置</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/ji-lu-wo-yu-bing-mo-de-yi-ci-kang-zheng/"" data-c="
+          &lt;p&gt;事情缘由是这样的: 10.9 日，周六，国庆节放假要补班，ε=(´ο｀*)))唉，一大早起床，发现不对劲，喉咙有点难受😅，完了，感冒的前兆...&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;iframe frameborder=&#34;no&#34; border=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; width=330 height=86 src=&#34;//music.163.com/outchain/player?type=2&amp;id=445546453&amp;auto=1&amp;height=66&#34;&gt;&lt;/iframe&gt;
+&lt;p&gt;没有多想，我便去上班了，接近两个小时的路程，和身体的不适，还有一个，就是这两天下雨天气，让人很难受&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1633916138500.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+我一整天迷迷糊糊的，还好工作任务不算太多，上班到下午六点，我本来想赶紧回去宿舍歇着，没想到同事相邀一起去吃饭，我也就没好拒绝，结果刚吃完，出来路上就一直鼻塞和打嗝，我想，凉凉了，指定感冒跑不掉了。&lt;br&gt;
+还有一个最最关键的，就是我为啥要坐公交车回学校..🙃&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1633916743942.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+路上车堵，走走停停，把我搞得头晕，更离谱的是下车在北门，离我宿舍还有15分钟脚程，记得回到宿舍是22点多了，我洗了个澡，鼻子塞了，头还有点晕，立马找到同学借了药来吃，（疫情期间，发热药不让外卖送...哭唧唧）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1633916999130.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+有一点效果吧，至少第二天，喉咙不痛了，之后是10月10号，周日，还好有一天假，我在宿舍躺到12点，起床吃了碗粥，又吃了药，才又趴到床上，直到17点起床，才感觉好点，希望能早点康复😊&lt;/p&gt;
+&lt;p&gt;最后上个照，天气渐渐凉了，大家注意保重身体啊~&lt;br&gt;
+&lt;img src=&#34;http://kevin5979.github.io/post-images/1633917320577.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-11&lt;/font&gt;&lt;/p&gt;
+">记录: 我与病魔的一次抗争</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/css-chao-chu-wen-ben-xian-shi-sheng-lue-hao/"" data-c="
+          &lt;h3 id=&#34;场景需求&#34;&gt;场景需求&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;前几天在公司写小程序的时候，发现有个样式重复书写，很是烦人，就是文本的超出换行显示省略号以及多行显示省略号，我就将这个样式抽取出来，在这里做下记录，后面再遇到可以来这里复制😎&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- more --&gt;
+&lt;h4 id=&#34;css-实现超出一行文本显示省略号&#34;&gt;CSS 实现超出一行文本显示省略号&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.single-line-text {
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;css-实现超出多行文本显示省略号&#34;&gt;CSS 实现超出多行文本显示省略号&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.multiple-line-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至此，又多了一个快速寻找代码片段的文章。👍&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-5&lt;/font&gt;&lt;/p&gt;
+">CSS 超出文本显示省略号</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/zong-jie-react-zhong-setstate-de-tong-bu-yu-yi-bu/"" data-c="
+          &lt;p&gt;  最近复习了一些关于&lt;code&gt;react&lt;/code&gt;的基础，发现&lt;code&gt;setState&lt;/code&gt;相关的知识忘记的差不多了，所以，以这篇博客记录一下，setState使用的细节&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;setstate的异步更新&#34;&gt;setState的异步更新&lt;/h2&gt;
+&lt;h3 id=&#34;自定义事件中为异步更新&#34;&gt;自定义事件中为异步更新&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div&amp;gt;
+  &amp;lt;h2&amp;gt;{this.state.message}&amp;lt;/h2&amp;gt;
+  &amp;lt;button onClick={e =&amp;gt; this.changeText()}&amp;gt;改变文本&amp;lt;/button&amp;gt;
+  &amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;changeText() {
+  this.setState({
+    message: &amp;quot;Hello React&amp;quot;
+  })
+  console.log(this.state.message);  // Hello World, 并不能同步拿到最新值 Hello React
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;为什么setstate设计为异步呢&#34;&gt;为什么setState设计为异步呢?&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;setState设计为异步，可以显著的提升性能；
+&lt;ul&gt;
+&lt;li&gt;如果每次调用&lt;code&gt;setState&lt;/code&gt;都进行一次更新，那么意味着&lt;code&gt;render&lt;/code&gt;函数会被频繁调用，界面重新渲染，这样效率是很低的；最好的办法应该是获取到多个更新，之后进行批量更新；&lt;/li&gt;
+&lt;li&gt;如果同步更新了&lt;code&gt;state&lt;/code&gt;，但是还没有执行&lt;code&gt;render函数&lt;/code&gt;，那么&lt;code&gt;state&lt;/code&gt;和&lt;code&gt;props&lt;/code&gt;不能保持同步；&lt;code&gt;state&lt;/code&gt;和&lt;code&gt;props&lt;/code&gt;不能保持一致性，会在开发中产生很多的问题；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;及时获取到setstate异步更新后的值&#34;&gt;及时获取到setState异步更新后的值&lt;/h3&gt;
+&lt;h4 id=&#34;setstatepartialstate-callback-方法获取&#34;&gt;setState(partialState, callback) 方法获取&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;changeText() {
+  this.setState({
+    message: &amp;quot;Hello React&amp;quot;
+  }, () =&amp;gt; {
+    console.log(this.state.message); // Hello React
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;生命周期函数-componentdidupdate-获取&#34;&gt;生命周期函数 componentDidUpdate 获取&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;componentDidUpdate(prevProps, provState) {
+  console.log(this.state.message); // Hello React
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;setstate的同步更新&#34;&gt;setState的同步更新&lt;/h2&gt;
+&lt;h3 id=&#34;settimeout-中为同步更新&#34;&gt;setTimeout 中为同步更新&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;changeText() {
+  setTimeout(() =&amp;gt; {
+    this.setState({
+      message: &amp;quot;Hello React&amp;quot;
+    });
+    console.log(this.state.message); // Hello React
+  }, 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;原生dom事件中为同步更新&#34;&gt;原生DOM事件中为同步更新&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const btnEl = document.getElementById(&amp;quot;btn&amp;quot;);
+  btnEl.addEventListener(&#39;click&#39;, () =&amp;gt; {
+    this.setState({
+      message: &amp;quot;Hello React&amp;quot;
+    });
+  console.log(this.state.message);  // Hello React
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;setstate的数据合并&#34;&gt;setState的数据合并&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;Object.assign(target, ...sources)&lt;/code&gt;来完成的，每次&lt;code&gt;setState&lt;/code&gt;并没有直接替换state中的所有数据，而是覆盖差异项，就是&lt;code&gt;setState&lt;/code&gt;中的key项&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;setstate的方法合并&#34;&gt;setState的方法合并&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;多个&lt;code&gt;setState&lt;/code&gt;连续执行，最终只会执行一个，例子中最后&lt;code&gt;counter&lt;/code&gt;只增加了 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;increment() {
+  this.setState({
+    counter: this.state.counter + 1
+  });
+  this.setState({
+    counter: this.state.counter + 1
+  });
+  this.setState({
+    counter: this.state.counter + 1
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;setState(callback)&lt;/code&gt; 取消合并，例子中最后&lt;code&gt;counter&lt;/code&gt;只增加了 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;increment() {
+  this.setState((state, props) =&amp;gt; {
+    return {
+      counter: state.counter + 1
+    }
+  })
+
+  this.setState((state, props) =&amp;gt; {
+    return {
+      counter: state.counter + 1
+    }
+  })
+
+  this.setState((state, props) =&amp;gt; {
+    return {
+      counter: state.counter + 1
+    }
+  })
+  }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;br/&gt;
+## 总结
+- 在`组件生命周期`或`React合成事件`中，setState是异步；
+- 在`定时器`或`原生dom事件`中，setState是同步；
+- `setState`数据合并，实际上是`Object.assign(target, ...sources) `
+- 通过`setState(callback)`的方式可取消`setState`的多个合并
+&lt;br/&gt;
+继续学习🤗~
+&lt;br/&gt;
+&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-2&lt;/font&gt;
+">总结: 关于 React 中 setState</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/ji-yi-ci-guo-qing-wai-chu/"" data-c="
+          &lt;p&gt;  今天二号了，昨天多看了会电影，今天起床比较晚，想着把昨天的&lt;code&gt;美图&lt;/code&gt;(假装是~)记录一下😋&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3 id=&#34;在路上&#34;&gt;在路上..&lt;/h3&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1633404630875.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h3 id=&#34;理发&#34;&gt;理发&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1633404920066.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;http://kevin5979.github.io/post-images/1633404702674.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;http://kevin5979.github.io/post-images/1633404931501.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;回到宿舍拍的夜景&#34;&gt;回到宿舍拍的夜景&lt;/h3&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;http://kevin5979.github.io/post-images/1633405297728.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;br/&gt;
+曾看到一句话，觉得深以为然
+&lt;blockquote&gt;
+&lt;p&gt;当我们张开双臂，可以说什么都没有，也可以说拥有了全世界。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;人的思维怎样，生活就会怎样，世界不变，环境不变，我们脚下的路，不取决于路怎样，永远取决于我们怎么去走&lt;br&gt;
+&lt;br/&gt;&lt;br&gt;
+&lt;strong&gt;PS：&lt;/strong&gt; 拍照技术不行😟（在学了！！）, 还有就是上火了，理发师傅看我长的痘痘，跟我说要喝点凉茶🤣（感谢~）&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-2&lt;/font&gt;&lt;/p&gt;
+">记一次国庆外出</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/zong-jie-css-de-ju-zhong-cao-zuo/"" data-c="
+          &lt;ul&gt;
+&lt;li&gt;CSS居中算是一个比较基础的问题，在实际运用中，需要考虑到的一般是两种情况
+&lt;ul&gt;
+&lt;li&gt;一种是主要是表现为文字，图片等行内元素的居中&lt;/li&gt;
+&lt;li&gt;一种是指 div 等块级标签元素的居中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;文字图片的居中&#34;&gt;文字图片的居中&lt;/h2&gt;
+&lt;h3 id=&#34;text-align-center&#34;&gt;text-align: center&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;center&amp;quot;&amp;gt;
+  &amp;lt;span class=&amp;quot;center_text&amp;quot;&amp;gt;123&amp;lt;/span&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.center{
+  text-align:center;
+}
+center_text{
+  display:inline-block;
+  width:500px
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;这种方式是在父元素中添加&lt;code&gt;text-align:center&lt;/code&gt;时，直接子元素如果是&lt;code&gt;inline&lt;/code&gt;或&lt;code&gt;inline-block&lt;/code&gt;，那么子元素在父元素中居中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;margin-0-auto&#34;&gt;margin: 0 auto&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;center&amp;quot;&amp;gt;
+  &amp;lt;span class=&amp;quot;center_text&amp;quot;&amp;gt;
+    块级元素 + 设置高度 + margin: 0 auto;
+ &amp;lt;/span&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.center_text {
+  display: block;
+  width: 500px;
+  margin: 0 auto;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;这种对齐方式要求内部元素&lt;code&gt;.content_text&lt;/code&gt;是&lt;code&gt;块级元素&lt;/code&gt;，并且&lt;code&gt;不能脱离文档流&lt;/code&gt;（如设置&lt;code&gt;position:absolute&lt;/code&gt;），否则无效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;块级标签元素的居中&#34;&gt;块级标签元素的居中&lt;/h2&gt;
+&lt;h3 id=&#34;脱离文档流的居中方式&#34;&gt;脱离文档流的居中方式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;mask&amp;quot;&amp;gt;
+　&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;我是要居中的板块，&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.mask {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 1;
+}
+
+.content {
+  display: block;
+  position: fixed;
+  width: 666px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  margin-left: -333px;
+  margin-top: -200px;
+  /* transform: translate(-50%, -50%); */
+  z-index: 2;
+  background-color: #fff;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;把内部div设置宽高之后，再设置top、left各为50%，设置完之后，这里是按照左端居中的，接着我们使用负边距的方式调整，将&lt;code&gt;margin-top&lt;/code&gt;设置为负的高度的一半，&lt;code&gt;margin-left&lt;/code&gt;设置为负的宽度的一半，就可以居中了。也可以用 &lt;strong&gt;transform: translate(-50%, -50%);&lt;/strong&gt; 替代&lt;code&gt;margin-top&lt;/code&gt;、&lt;code&gt;margin-left&lt;/code&gt;，直接一步到位&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;使用css3计算的方式居中元素calc&#34;&gt;使用css3计算的方式居中元素calc&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;mask&amp;quot;&amp;gt;
+　&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;我是要居中的板块，&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.mask {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid #ccc;
+}
+
+.content {
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 150px);
+  width: 300px;
+  height: 100px;
+  border: 1px solid #000;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;这种方式同样是将脱离文档流的元素，然后使用计算的方式来设置top和left；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br/&gt;
+&lt;p&gt;  今天是10月1号，国庆节，我起了个大早，忘记了今天不上班，刚刚去看了好声音，真不错，出门剪了个不漂亮的发型🙃 ，还吃了炸鸡，然后，然后就上火长痘痘了，ε=(´ο｀*)))唉，.最后祝大家国庆快乐，祝我们祖国越来越强大 👍!!!&lt;/p&gt;
+&lt;iframe frameborder=&#34;no&#34; border=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; width=330 height=86 src=&#34;//music.163.com/outchain/player?type=2&amp;id=1851244378&amp;auto=1&amp;height=66&#34;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;最后更新于 2021-10-1&lt;/font&gt;&lt;/p&gt;
+">总结: CSS的居中操作</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="http://kevin5979.github.io/post/about/"" data-c="
+          &lt;blockquote&gt;
+&lt;p&gt;欢迎来到我的小站呀，很高兴遇见你！🤝&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;关于本站&#34;&gt;🏠 关于本站&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;博主用来记录日常，学习，生活，吐槽的基地&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;博主是谁&#34;&gt;👨‍💻 博主是谁&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;网名: 随影苍海东来，也叫随影&lt;/li&gt;
+&lt;li&gt;生日: 1999-11-20&lt;/li&gt;
+&lt;li&gt;身高: 175cm&lt;/li&gt;
+&lt;li&gt;体重: 70kg&lt;/li&gt;
+&lt;li&gt;学历: 本科(大四) 软件工程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;我的冲浪&#34;&gt;🌹 我的冲浪&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;github：&lt;a href=&#34;https://github.com/Kevin5979&#34;&gt;https://github.com/Kevin5979&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;gitee：&lt;a href=&#34;https://gitee.com/kevin5979&#34;&gt;https://gitee.com/kevin5979&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;简书：&lt;a href=&#34;https://www.jianshu.com/u/d672e5d7dc0d&#34;&gt;https://www.jianshu.com/u/d672e5d7dc0d&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;博客系统：&lt;a href=&#34;http://119.29.140.144/blog/home/u/8&#34;&gt;http://119.29.140.144/blog/home/u/8&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;兴趣爱好&#34;&gt;⛹ 兴趣爱好&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;前端开发&lt;/li&gt;
+&lt;li&gt;电影解说&lt;/li&gt;
+&lt;li&gt;运动&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;联系我呀&#34;&gt;📬 联系我呀&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;欢迎交流~&lt;/li&gt;
+&lt;li&gt;QQ: 597944688&lt;/li&gt;
+&lt;li&gt;邮箱: 597944688@qq.com&lt;/li&gt;
+&lt;/ul&gt;
+">关于本站</a>
+      </div>
+      
+    </div>
+    <div class="page">
+      <div id="page_ul"></div>
+    </div>
+  </div>
+</div>
+<script>
+  !function () {
+    let searchMask = document.querySelector('#search_mask');
+    let result = document.querySelector('#result');
+    let items = document.querySelectorAll('.item');
+    let searchBox = document.querySelector('#search');
+    let statCount = document.querySelector('#stat_count');
+    let statTimes = document.querySelector('#stat_times');
+    let pageUl = document.querySelector('#page_ul');
+    let close = document.querySelector('#close');
+    
+    close.addEventListener('click', function() {
+      searchMask.style = 'display: none;'
+    })
+
+    let finds = [];
+    let contents = [];
+    let pageSize = 10;
+    items.forEach(item => {
+      let a = item.querySelector('a');
+      contents.push({
+        title: a.innerText,
+        details: a.dataset.c,
+        link: a.href
+      })
+      item.remove();
+    })
+
+    function insertStr(soure, start, count) {
+      let newStr = soure.substr(start, count);
+      return soure.slice(0, start) + '<em>' + newStr + '</em>' + soure.slice(start + count);
+    }
+
+    pageUl.addEventListener('click', function(event) {
+      let target = event.target;
+      if (target.__proto__ === HTMLSpanElement.prototype) {
+        appendResults(parseInt(target.dataset.i));
+      }
+    })
+
+    function appendResults(index) {
+      let htmlResult = '';
+      let start = index || 0;
+      let end = Math.min(start + pageSize, finds.length);
+      for (let i = start; i < end; i++) {
+        const current = finds[i];
+        let html = current.title;
+        let sum = 0;
+        let positions = current.positions;
+        positions.forEach(position => {
+          html = insertStr(html, position.start + sum, position.count);
+          sum += 9;
+        })
+        htmlResult += `<div class="item"><a class="result-title" href="${current.link}">${html}</a></div>`;
+      }
+      result.innerHTML = htmlResult;
+      pageUl.innerHTML = '';
+      let count = finds.length / pageSize;
+      let lis = '';
+      if (start !== 0) {
+        lis += `<span class="fa fa-angle-left" data-i='${start - 1}'></span>`;
+      }
+      for (let i = 0; i < count; i++) {
+        lis += `<span class='${i === start?'current':''}' data-i='${i}'>${i+1}</span>`;     
+      }
+      if (start+1 < count) {
+        lis += `<span class="fa fa-angle-right" data-i='${start+1}'></span>`;  
+      }
+      pageUl.innerHTML = lis;
+    }
+
+    function search(delay) {
+      let timer = null
+      return function () {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          let start = Date.now();
+          let segments = searchBox.value.split(' ').filter(c => c != '');
+          if (segments.length <= 0) {
+            return;
+          }
+          finds = [];
+          let htmlResult = '';
+          contents.forEach(content => {
+            let title = content.title;
+            let positions = [];
+            let find = false;
+            segments.forEach((segment) => {
+              if (content.title.includes(segment)) {
+                find = true;
+                positions.push({
+                  start: content.title.indexOf(segment),
+                  count: segment.length
+                })
+              } else if (content.details.includes(segment)) {
+                find = true;
+              }
+            });
+            if (find) {
+              finds.push({
+                title: content.title,
+                link: content.link,
+                positions
+              });
+            }
+          })
+          appendResults(0);
+          statCount.textContent = finds.length;
+          statTimes.textContent = Date.now() - start;
+        }, delay)
+      }
+    }
+    searchBox.addEventListener('input', search(200));
+  }()
+</script>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = '';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+  //拿来主义(真香)^_^，Clipboard 实现摘自掘金 https://juejin.im/post/5aefeb6e6fb9a07aa43c20af
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script>
+  var scroll = new SmoothScroll('a[href*="#"]', {
+    speed: 200
+  });
+</script>
+
+
+
+<script src="/media/js/cool.js"></script>
+
+
+
+</html>
